@@ -1,3 +1,3 @@
 module.exports = {
-  DB_CONNECT = "mongodb://localhost/testdb"
+  DB_CONNECT: "mongodb+srv://mirato:chanceball@cluster0-rhqsu.mongodb.net/test?retryWrites=true&w=majority"
 }
