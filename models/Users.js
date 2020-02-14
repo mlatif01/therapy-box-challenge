@@ -32,7 +32,20 @@ const registerValidation = (data) => {
   return schema.validate(data);
 }
 
+// Login Validation
+const loginValidation = (data) => {
+  const schema = Joi.object({
+    username: Joi.string().min(6).max(30).required(),
+    password: Joi.string().min(6).required()
+  });
+  return schema.validate(data);
+}
+
+
+
 
 // Export
 module.exports = mongoose.model('Users', userSchema);
 module.exports.registerValidation = registerValidation;
+module.exports.loginValidation = loginValidation;
+

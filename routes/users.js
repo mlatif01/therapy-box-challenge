@@ -1,9 +1,12 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const {TOKEN_SECRET} = require('../config/keys');
+const jwt_decode = require('jwt-decode');
 
 // Models
 const Users = require('../models/Users');
-const {registerValidation} = require('../models/Users');
+const {registerValidation, loginValidation} = require('../models/Users');
 
 /**
  * GET
@@ -15,7 +18,7 @@ router.get('/', (req, res) => {
 
 /**
  * POST
- * Register Users
+ * Register User
  */
 router.post('/register', async (req, res) => {
   
@@ -67,6 +70,52 @@ router.post('/register', async (req, res) => {
     console.log(err);
   }
 })
+
+
+/**
+ * POST
+ * Login User
+ */
+router.post('/login', async (req, res) => {
+  // Validate before we login user
+  const { error } = loginValidation(req.body);
+  if (error) return res.status(400).json({
+    status: 'error',
+    type: error.details[0].path,
+    message: error.details[0].message
+  });
+
+  // Check if username is in DB
+  const user = await Users.findOne({username: req.body.username});
+  if (!user) return res.status(400).json({
+    status: 'error',
+    type: 'username',
+    message: 'Username is invalid'
+  });
+
+  // Check if password is correct
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword) {
+    return res.status(400).json({
+      status: 'error',
+      type: 'password',
+      message: 'Password is invalid'
+    });
+  }
+
+  // Create and assign token
+  const token = jwt.sign({ _id: user._id }, TOKEN_SECRET, {expiresIn: 3600}, (err, token) => {
+    // Get user from token
+    const decode = jwt_decode(token);
+
+    res.json({
+      success: true,
+      token: token,
+      decode: decode
+    });
+  });
+
+});
 
 // Export
 module.exports = router;
