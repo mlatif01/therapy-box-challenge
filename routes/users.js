@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 const {TOKEN_SECRET} = require('../config/keys');
 const jwt_decode = require('jwt-decode');
 
+// Auth
+const auth = require('../config/auth');
+
 // Models
 const Users = require('../models/Users');
 const {registerValidation, loginValidation} = require('../models/Users');
@@ -71,7 +74,6 @@ router.post('/register', async (req, res) => {
   }
 })
 
-
 /**
  * POST
  * Login User
@@ -116,6 +118,14 @@ router.post('/login', async (req, res) => {
   });
 
 });
+
+/**
+ * GET
+ * Test Protected Routes
+ */
+router.get('/current', auth, (req, res) => {
+  res.send('You can visit this route!');
+})
 
 // Export
 module.exports = router;

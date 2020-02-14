@@ -93,6 +93,7 @@ button:hover {
 .link {
   color: #ffff00;
   text-decoration: none;
+  margin-bottom: 2rem;
 }
 
 .link:hover {
