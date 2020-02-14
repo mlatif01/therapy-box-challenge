@@ -3,7 +3,7 @@
   position: relative;
 }
 
-h1 {
+.form-header h1 {
   margin-top: 5rem;
   text-align: center;
   color: #fff;

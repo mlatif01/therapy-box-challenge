@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 // import { Link, Redirect } from 'react-router-dom';
+import NewsThumbnail from '../news-thumbnail/NewsThumbnail';
+import "./style.css";
 
 class Dashboard extends Component {
 
@@ -45,15 +47,12 @@ class Dashboard extends Component {
           <h1>Good day {username}</h1>
         </div>
         <div className="dashboard-container">
-          <div className="dashboard-item">
-            
-          </div>
-          <div className="dashboard-item">
-            
-          </div>
-          <div className="dashboard-item">
-            
-          </div>
+          <NewsThumbnail />
+          <NewsThumbnail />
+          <NewsThumbnail />
+          <NewsThumbnail />
+          <NewsThumbnail />
+          <NewsThumbnail />
         </div>
       </React.Fragment>
 

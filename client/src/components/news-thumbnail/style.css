@@ -1,0 +1,43 @@
+.thumbnail-item {
+  display: grid;
+  grid-template-areas:
+  'header header'
+  'icon temp'
+  'icon city';
+  background-image: url("./assets/Container.png");
+  background-repeat: no-repeat;
+  background-size: 20rem 40rem;
+  background-size: contain;
+  height: 300px;
+  width: 350px;
+  margin: 2rem auto;
+}
+
+h1 {
+  font-size: 1.6rem;
+  font-weight: 300;
+  text-align: center;
+}
+
+.thumbnail-header {
+  grid-area: header;
+  font-size: 1rem;
+}
+
+.thumbnail-icon {
+  grid-area: icon;
+}
+
+.thumbnail-icon img {
+  width: 50%;
+  margin-left: 10px;
+}
+
+.thumbnail-temp {
+  grid-area: temp;
+}
+
+.thumbnail-city {
+  grid-area: city;
+}
+
