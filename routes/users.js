@@ -12,14 +12,6 @@ const Users = require('../models/Users');
 const {registerValidation, loginValidation} = require('../models/Users');
 
 /**
- * GET
- * Test Method
- */
-router.get('/', (req, res) => {
-  res.send("Test Api");
-});
-
-/**
  * POST
  * Register User
  */
@@ -121,11 +113,29 @@ router.post('/login', async (req, res) => {
 
 /**
  * GET
- * Test Protected Routes
+ * Protected Routes
  */
-router.get('/current', auth, (req, res) => {
-  res.send('You can visit this route!');
-})
+// router.get('/current', auth, (req, res) => {
+//   res.send('You can visit this route!');
+// })
+
+/**
+ * GET
+ * User Login Data
+ */
+// GET - user login data -- Improve implementation --
+router.get('/getuser', auth, async (req, res) => {
+  console.log(req.user);
+  const user = await Users.findById(req.user);
+  res.send({
+    username: user.username,
+    email: user.email
+  });
+});
+
+router.get('/current', auth, async (req, res) => {
+  res.send('Test API');
+});
 
 // Export
 module.exports = router;
