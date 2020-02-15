@@ -68,17 +68,17 @@ class WeatherThumbnail extends Component {
 
   render() {
     return (
-      <div className="thumbnail-item">
-        <div className="thumbnail-header">
+      <div className="weather-thumbnail-item">
+        <div className="weather-thumbnail-header">
           <h1 className="">Weather</h1>
         </div>
-        <div className="thumbnail-icon">
+        <div className="weather-thumbnail-icon">
           <img src={this.state.logo} alt=""/>
         </div>
-        <div className="thumbnail-temp">
+        <div className="weather-thumbnail-temp">
           <p>{this.state.temp} degrees</p>
         </div>
-        <div className="thumbnail-loc">
+        <div className="weather-thumbnail-loc">
           <p className="">{this.state.loc}</p>
         </div>
       </div>

@@ -6,6 +6,7 @@ const port = process.env.PORT || 5000;
 const {DB_CONNECT} = require('./config/keys');
 
 const users = require('./routes/users');
+const news = require('./routes/news');
 
 // Connect to DB
 mongoose.connect(DB_CONNECT, {useNewUrlParser: true}, () => {
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/users', users);
+app.use('/api/news', news);
 
 // Listen on specified port
 app.listen(port, () => console.log(`Listening on ${port}`));

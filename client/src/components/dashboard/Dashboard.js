@@ -3,6 +3,7 @@ import axios from 'axios';
 // import { Link, Redirect } from 'react-router-dom';
 import "./style.css";
 import WeatherThumbnail from '../weather-thumbnail/WeatherThumbnail';
+import NewsThumbnail from '../news-thumbnail/NewsThumbnail';
 
 class Dashboard extends Component {
 
@@ -48,7 +49,7 @@ class Dashboard extends Component {
         </div>
         <div className="dashboard-container">
           <WeatherThumbnail />
-          <WeatherThumbnail />
+          <NewsThumbnail />
           <WeatherThumbnail />
           <WeatherThumbnail />
           <WeatherThumbnail />
