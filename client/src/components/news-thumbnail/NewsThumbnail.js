@@ -1,19 +1,34 @@
 import React, { Component } from 'react'
 import "./style.css";
-// import axios from 'axios';
+import axios from 'axios';
 
 class NewsThumbnail extends Component {
 
   state = {
-
+    headline: "",
+    article: ""
   }
 
-  getNewsXML() {
-    
+  async getNewsXML() {
+    // get json news object from server
+    try {
+      const res = await axios.get('/api/news');
+      if (res.status === 200) {
+        // get news headline and description
+        const newsData = res.data.rss.channel[0].item[0];
+        console.log(newsData);
+        this.setState({
+          headline: newsData.title[0],
+          article: newsData.description[0]
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async componentDidMount () {
-
+    this.getNewsXML();
   }
 
   render() {
@@ -23,10 +38,10 @@ class NewsThumbnail extends Component {
           <h1 className="">News</h1>
         </div>
         <div className="news-thumbnail-headline">
-          <h2>HEADLINE</h2>
+          <h2>{this.state.headline}</h2>
         </div>
         <div className="news-thumbnail-article">
-          <p>ARTICLE</p>
+          <p>{this.state.article}</p>
         </div>
       </div>
     )
