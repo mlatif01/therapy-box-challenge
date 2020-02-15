@@ -11,6 +11,15 @@ class News extends Component {
     image: ""
   }
 
+  componentDidMount() {
+    const {headline, article, image} = this.props.location.state.newsData;
+    this.setState({
+      headline: headline,
+      article: article,
+      image: image
+    })
+  }
+
   render() {
     return (
       <div className="news-item">
@@ -19,7 +28,7 @@ class News extends Component {
           <img src={imageBorder} alt=""/>
         </div>
         <div className="news-headline">
-          <h2>Headline</h2>
+          <h2>{this.state.headline}</h2>
         </div>
         <div className="news-article">
           <p>{this.state.article}</p>

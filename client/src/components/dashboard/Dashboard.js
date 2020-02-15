@@ -9,7 +9,12 @@ class Dashboard extends Component {
 
   state = {
     username: "",
-    email: ""
+    email: "",
+    newsData: {
+      headline: "",
+      article: "",
+      image: ""
+    }
   };
 
 
@@ -33,11 +38,22 @@ class Dashboard extends Component {
           username: res.data.username,
           email: res.data.email
         });
-        console.log(res.data);
       }
     } catch (err) {
       console.log(err.message);
     }
+  }
+
+  // update news data passed from child (NewsThumbnail) to parent state (Dashboard)
+  updateNewsData = (headline, article, image) => {
+    this.setState({
+      newsData: {
+        headline: headline,
+        article: article,
+        image: image
+      }
+    })
+    console.log(this.state);
   }
   
   render() {
@@ -49,7 +65,14 @@ class Dashboard extends Component {
         </div>
         <div className="dashboard-container">
           <WeatherThumbnail />
-          <Link to="/news" className="news-link"><NewsThumbnail /></Link>
+          <Link 
+            to= {{
+              pathname: '/news',
+              state: {
+                newsData: this.state.newsData
+              }
+            }}
+            className="news-link"><NewsThumbnail triggerParentUpdate={this.updateNewsData}/></Link>
           <WeatherThumbnail />
           <WeatherThumbnail />
           <WeatherThumbnail />

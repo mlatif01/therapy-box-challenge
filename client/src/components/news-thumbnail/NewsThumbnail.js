@@ -7,7 +7,8 @@ class NewsThumbnail extends Component {
   state = {
     headline: "",
     article: "",
-    image: ""
+    image: "",
+    fullArticle: ""
   }
 
   async getNewsXML() {
@@ -17,12 +18,13 @@ class NewsThumbnail extends Component {
       if (res.status === 200) {
         // get news headline and description
         const newsData = res.data.rss.channel[0].item[0];
-        console.log(res.data.rss.channel[0]);
         this.setState({
           headline: newsData.title[0],
           article: newsData.description[0],
           image: ""
         });
+        // update parent (dashboard) with news data
+        this.props.triggerParentUpdate(this.state.headline, this.state.article, this.state.image);
       }
     } catch (err) {
       console.log(err);
