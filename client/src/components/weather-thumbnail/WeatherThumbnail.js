@@ -1,32 +1,65 @@
 import React, { Component } from 'react'
 import "./style.css";
-import logo from './assets/Rain_icon.png';
+import logoRain from './assets/Rain_icon.png';
+import logoCloud from './assets/Clouds_icon.png';
+import logoSun from './assets/Sun_icon.png';
 import axios from 'axios';
 
 class WeatherThumbnail extends Component {
 
   state = {
-    logo: logo,
+    logo: "",
     temp: "",
-    city: ""
+    loc: ""
+  }
+
+  requestPosition() {
+    // --- Stack overflow --- https://stackoverflow.com/questions/2707191/unable-to-cope-with-the-asynchronous-nature-of-navigator-geolocation
+    // additionally supplying options for fine tuning, if you want to
+    var options = {
+      enableHighAccuracy: true,
+      timeout:    5000,   // time in millis when error callback will be invoked
+      maximumAge: 0,      // max cached age of gps data, also in millis
+    };
+  
+    return new Promise(function(resolve, reject) {
+      navigator.geolocation.getCurrentPosition(
+        pos => { resolve(pos); }, 
+        err => { reject (err); }, 
+        options);
+    });
   }
 
   async componentDidMount () {
-    console.log(getGeoLocation());
-    // Make api call to weather api -- Should add below in another function -- clean up
+    // Make api call to weather api -- Should add below in another util function -- clean up
     const api_key = "d0a10211ea3d36b0a6423a104782130e";
-
+    // get users current geo location
+    const position = await this.requestPosition();
+    const lon = position.coords.longitude;
+    const lat = position.coords.latitude;
     // make call to openweather map api to get weather info
     try {
-      geoObj = await getGeoLocation();
-      const res = await axios.get(`api.openweathermap.org/data/2.5/weather?lat=${geoObj.lat}&lon=${geoObj.lat}&appid=${api_key}`);
+      const res = await axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}`);
       if (res.status === 200) {
-        // Set username
-        this.setState({
-          username: res.data.username,
-          email: res.data.email
-        });
-        console.log(res.data);
+        // Set logo
+        switch (res.data.weather[0].main) {
+          case "Clouds":
+            this.state.logo = logoCloud;
+            break;
+          case "Sun":
+            this.state.logo = logoSun;
+            break;
+          case "Rain":
+            this.state.logo = logoRain;
+            break;
+          default:
+            break;
+        }
+        // set temp -- convert kelvin to celsius
+        const celFromKel = Math.round(res.data.main.temp - 273.15);
+        this.state.temp = celFromKel;
+        // set city
+        this.state.loc = res.data.name;
       }
     } catch (err) {
       console.log(err.message);
@@ -37,35 +70,19 @@ class WeatherThumbnail extends Component {
     return (
       <div className="thumbnail-item">
         <div className="thumbnail-header">
-          <h1 className="">NEWS</h1>
+          <h1 className="">Weather</h1>
         </div>
         <div className="thumbnail-icon">
           <img src={this.state.logo} alt=""/>
         </div>
         <div className="thumbnail-temp">
-          <p>12 Degrees</p>
+          <p>{this.state.temp} degrees</p>
         </div>
-        <div className="thumbnail-city">
-          <p className="">London</p>
+        <div className="thumbnail-loc">
+          <p className="">{this.state.loc}</p>
         </div>
       </div>
     )
-  }
-}
-
-function getGeoLocation() {
-  // get users current geo location
-  if (navigator.geolocation.getCurrentPosition( (position)=> {
-    const lon = position.coords.longitude;
-    const lat = position.coords.latitude;
-    const geoObj = {
-      lon: lon,
-      lat: lat
-    }
-    return geoObj;
-  }));
-  else {
-    console.log("geolocation is not supported");
   }
 }
 

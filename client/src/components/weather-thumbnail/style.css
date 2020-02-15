@@ -3,7 +3,7 @@
   grid-template-areas:
   'header header'
   'icon temp'
-  'icon city';
+  'icon loc';
   background-image: url("./assets/Container.png");
   background-repeat: no-repeat;
   background-size: 20rem 40rem;
@@ -29,15 +29,17 @@ h1 {
 }
 
 .thumbnail-icon img {
-  width: 50%;
+  width: 60%;
   margin-left: 10px;
 }
 
 .thumbnail-temp {
   grid-area: temp;
+  font-size: 1.6rem;
 }
 
-.thumbnail-city {
-  grid-area: city;
+.thumbnail-loc {
+  grid-area: loc;
+  font-size: 1.6rem;
 }
 
