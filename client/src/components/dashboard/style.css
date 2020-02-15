@@ -14,6 +14,16 @@
 
 }
 
+.news-link {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
+.news-link:hover {
+  opacity: 0.8;
+}
+
 @media only screen and (max-width: 1144px) {
   .dashboard-container {
     display: grid;

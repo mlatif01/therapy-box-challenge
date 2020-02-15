@@ -1,0 +1,31 @@
+.news-header {
+  margin-top: 3rem;
+}
+
+.news-header h1 {
+  display: inline-block;
+  text-align: left;
+  padding-left: 4rem;
+  position: absolute;
+}
+
+.news-header img {
+  align-items: center;
+  margin: 0 auto;
+  justify-content: center;
+  align-content: center;
+  display: flex;
+  height: 350px;
+}
+
+.news-headline {
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 1.6rem
+}
+
+.news-article {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.2rem;
+}

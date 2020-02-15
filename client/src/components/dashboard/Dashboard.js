@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-// import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import "./style.css";
 import WeatherThumbnail from '../weather-thumbnail/WeatherThumbnail';
 import NewsThumbnail from '../news-thumbnail/NewsThumbnail';
@@ -49,7 +49,7 @@ class Dashboard extends Component {
         </div>
         <div className="dashboard-container">
           <WeatherThumbnail />
-          <NewsThumbnail />
+          <Link to="/news" className="news-link"><NewsThumbnail /></Link>
           <WeatherThumbnail />
           <WeatherThumbnail />
           <WeatherThumbnail />
