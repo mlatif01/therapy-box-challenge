@@ -14,13 +14,13 @@
 
 }
 
-.news-link {
+.news-link, .sport-link {
   text-decoration: none;
   color: #000;
   cursor: pointer;
 }
 
-.news-link:hover {
+.news-link:hover, .sport-link:hover {
   opacity: 0.8;
 }
 

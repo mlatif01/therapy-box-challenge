@@ -1,7 +1,10 @@
 const router = require('express').Router();
 const parseString = require('xml2js').parseString;
 const bbcUrl = 'http://feeds.bbci.co.uk/news/rss.xml';
+const sportUrl = 'http://www.football-data.co.uk/mmz4281/1718/I1.csv';
 const axios = require('axios').default;
+const CSVtoJSON = require('csvtojson');
+
 // Auth
 const auth = require('../config/auth');
 
@@ -23,35 +26,92 @@ router.get('/bbc', async (req, res) => {
   }
 })
 
-// should add in seperate route for clothes (in here for testing)
-router.get('/clothes', auth, async (req, res) => {
-  // get clothes data
-  try {
-    const response = await axios.get('https://therapy-box.co.uk/hackathon/clothing-api.php?username=swapnil');
-    const json = response.data.payload;
-    res.send(json);
-  } catch (err) {
-    console.log(err.message);
-  }
-})
-
 /**
  * GET
  * CSV Sport News
  */
-// router.get('/sport', async (req, res) => {
-//   // get xml news data
-//   try {
-//     const xmlRes = await axios.get(newsUrl);
-//     // parse xml response data
-//     const parsedXml = parseString(xmlRes.data, (err, result) => {
-//       const json = JSON.stringify(result);
-//       res.send(json);
-//     });
-//   } catch (err) {
-//     console.log(err.message);
-//   }
-// })
+router.get('/sport', async (req, res) => {
+  // get csv data 
+  const response = await axios.get(sportUrl);
+  const csvString = response.data;
+  // conv csv to json
+  CSVtoJSON().fromString(csvString)
+    .then((source) => {
+      const matchDataArr = [];
+      source.forEach((row) => {
+        matchDataArr.push({
+          homeTeam: row.HomeTeam,
+          awayTeam: row['AwayTeam'],
+          fullTimeResult: row['FTR'],
+        });
+      })
+      // filter out necessary data
+      // we want an array with team objects as follows
+      const teamsArr = [
+        /* 
+        {
+          team: 'Juventus',
+          teamsBeaten: ['Cagliari', 'Napoli']
+        }, ...
+        */
+      ];
+      // Loop through teamArr data 
+      matchDataArr.forEach((matchData) => {
+        // create structure for team objects
+        const teamArrObj = {
+          teamName: "",
+          teamsBeaten: []
+        };
+        // -- CODE BELOW NEEDS TO BE OPTIMISED --
+        // if HOME TEAM wins add home team as team name and away team to teams beaten list
+        if (matchData.fullTimeResult === 'H') {
+          // check if that team object is already in the teams array
+          if (teamsArr.filter(e => e.teamName === matchData.homeTeam)) {
+            // if it is found then just add away team to their teams beaten
+            teamsArr.forEach((teamData) => {
+              if (teamData.teamName === matchData.homeTeam) {
+                teamData.teamsBeaten.push(matchData.awayTeam);
+              }
+            })
+            // get rid of duplicates in teamsBeaten array incase they are already added
+
+          } else {
+            // add new entry for the team to teamsArr
+            teamArrObj.teamName = matchData.homeTeam;
+            teamArrObj.teamsBeaten.push(matchData.awayTeam);
+          }
+
+        // if AWAY TEAM wins add away team as team name and home team to teams beaten list
+        } else if (matchData.fullTimeResult === 'A') {
+          // check if that team object is already in the teams array
+          if (teamsArr.filter(e => e.teamName === matchData.awayTeam).length > 0) {
+            // if it is found then just add home team to their teams beaten
+            teamsArr.forEach((teamData) => {
+              if (teamData.teamName === matchData.awayTeam) {
+                teamData.teamsBeaten.push(matchData.homeTeam);
+              }
+            })
+            // get rid of duplicates in teamsBeaten array incase they are already added
+
+          } else {
+            // add new entry for the team to teamsArr
+            teamArrObj.teamName = matchData.awayTeam;
+            teamArrObj.teamsBeaten.push(matchData.homeTeam);
+          }
+        }
+        if (teamArrObj.teamName !== "") {
+          teamsArr.push(teamArrObj);
+        }
+      });
+      try {
+        if (response.status === 200) {
+          res.json(teamsArr);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    });
+})
 
 
 // Export

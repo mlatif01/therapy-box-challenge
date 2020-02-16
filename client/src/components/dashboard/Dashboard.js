@@ -5,6 +5,8 @@ import "./style.css";
 import WeatherThumbnail from '../weather-thumbnail/WeatherThumbnail';
 import NewsThumbnail from '../news-thumbnail/NewsThumbnail';
 import ClothesThumbnail from '../clothes-thumbnail/ClothesThumbnail';
+import SportThumbnail from '../sport-thumbnail/SportThumbnail';
+
 
 class Dashboard extends Component {
 
@@ -74,7 +76,11 @@ class Dashboard extends Component {
               }
             }}
             className="news-link"><NewsThumbnail triggerParentUpdate={this.updateNewsData}/></Link>
-          <WeatherThumbnail />
+          <Link
+            to={{
+              pathname: '/sport'
+            }}
+            className="sport-link"><SportThumbnail /></Link>
           <WeatherThumbnail />
           <WeatherThumbnail />
           <ClothesThumbnail />

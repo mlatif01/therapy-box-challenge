@@ -54,7 +54,6 @@ class ClothesThumbnail extends Component {
     // update pie chart ui
     let piechart = this.reference.chartInstance;
     piechart.update();
-    console.log(piechart);
   }
 
   async componentDidMount() {
@@ -72,7 +71,6 @@ class ClothesThumbnail extends Component {
       this.setState({
         clothesData: res.data
       })
-      console.log(this.state.clothesData);
     } catch (err) {
       console.log(err);
     }
