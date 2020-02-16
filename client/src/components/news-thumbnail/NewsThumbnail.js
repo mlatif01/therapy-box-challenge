@@ -21,7 +21,7 @@ class NewsThumbnail extends Component {
         this.setState({
           headline: newsData.title[0],
           article: newsData.description[0],
-          image: ""
+          image: res.data.rss.channel[0].image[0].url[0]
         });
         // update parent (dashboard) with news data
         this.props.triggerParentUpdate(this.state.headline, this.state.article, this.state.image);

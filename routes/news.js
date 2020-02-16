@@ -23,6 +23,18 @@ router.get('/bbc', async (req, res) => {
   }
 })
 
+// should add in seperate route for clothes (in here for testing)
+router.get('/clothes', auth, async (req, res) => {
+  // get clothes data
+  try {
+    const response = await axios.get('https://therapy-box.co.uk/hackathon/clothing-api.php?username=swapnil');
+    const json = response.data.payload;
+    res.send(json);
+  } catch (err) {
+    console.log(err.message);
+  }
+})
+
 /**
  * GET
  * CSV Sport News

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import "./style.css";
 import WeatherThumbnail from '../weather-thumbnail/WeatherThumbnail';
 import NewsThumbnail from '../news-thumbnail/NewsThumbnail';
+import ClothesThumbnail from '../clothes-thumbnail/ClothesThumbnail';
 
 class Dashboard extends Component {
 
@@ -76,7 +77,7 @@ class Dashboard extends Component {
           <WeatherThumbnail />
           <WeatherThumbnail />
           <WeatherThumbnail />
-          <WeatherThumbnail />
+          <ClothesThumbnail />
         </div>
       </React.Fragment>
 
