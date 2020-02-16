@@ -52,8 +52,12 @@ class ClothesThumbnail extends Component {
       this.state.chartData.datasets[0].data.push(this.state.clothesFreq[obj]);
     }
     // update pie chart ui
-    let piechart = this.reference.chartInstance;
-    piechart.update();
+    try {
+      let piechart = this.reference.chartInstance;
+      piechart.update();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async componentDidMount() {

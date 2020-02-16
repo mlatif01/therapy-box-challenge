@@ -7,6 +7,7 @@
   text-align: left;
   padding-left: 4rem;
   position: absolute;
+  color: #fff;
 }
 
 .news-header img {
@@ -21,11 +22,13 @@
 .news-headline {
   margin-top: 3rem;
   text-align: center;
-  font-size: 1.6rem
+  font-size: 1.6rem;
+  color: #fff;
 }
 
 .news-article {
   margin-top: 2rem;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  color: #fff;
 }

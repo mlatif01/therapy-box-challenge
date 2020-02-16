@@ -17,7 +17,7 @@ class Dashboard extends Component {
       headline: "",
       article: "",
       image: ""
-    }
+    },
   };
 
 
@@ -56,7 +56,6 @@ class Dashboard extends Component {
         image: image
       }
     })
-    console.log(this.state);
   }
   
   render() {
@@ -80,7 +79,7 @@ class Dashboard extends Component {
             to={{
               pathname: '/sport'
             }}
-            className="sport-link"><SportThumbnail /></Link>
+            className="sport-link"><SportThumbnail teamName={this.props.teamName}/></Link>
           <WeatherThumbnail />
           <WeatherThumbnail />
           <ClothesThumbnail />

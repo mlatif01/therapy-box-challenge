@@ -1,0 +1,60 @@
+.sport-header {
+  margin-top: 3rem;
+}
+
+.sport-header h1 {
+  display: block;
+  text-align: left;
+  padding-left: 4rem;
+  color: #fff;
+  font-size: 4rem;
+  font-weight: 500;
+}
+
+.sport-form-container {
+  margin-top: 6rem;
+}
+
+.sport-form-group {
+  position: relative;
+  margin-top: 4rem;
+  margin: 0 auto;
+}
+
+.sport-content {
+  margin-top: 4rem;
+}
+
+.sport-content h2 {
+  margin-left: 4rem;
+  color: #fff;
+  font-weight: lighter;
+}
+
+.sport-form-container input[type="text"] {
+  display: block;
+  margin: 0 auto;
+}
+
+.teams-beaten {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+  margin-left: 4rem;
+  list-style: none;
+  color: #fff;
+}
+
+.teams-beaten li {
+  margin: 1rem;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+::placeholder {
+  color: #fff;
+}
