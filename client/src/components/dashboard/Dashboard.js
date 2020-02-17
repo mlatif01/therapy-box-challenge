@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import auth from '../../auth';
 import "./style.css";
 import WeatherThumbnail from '../weather-thumbnail/WeatherThumbnail';
 import NewsThumbnail from '../news-thumbnail/NewsThumbnail';
 import ClothesThumbnail from '../clothes-thumbnail/ClothesThumbnail';
 import SportThumbnail from '../sport-thumbnail/SportThumbnail';
 import TasksThumbnail from '../tasks-thumbnail/TasksThumbnail';
+import PhotosThumbnail from '../photos-thumbnail/PhotosThumbnail';
 
 
 class Dashboard extends Component {
@@ -60,38 +62,59 @@ class Dashboard extends Component {
   
   render() {
     const { username } = this.state;
-    return (
-      <React.Fragment>
-        <div className="dashboard-header" value={username}>
-          <h1>Good day {username}</h1>
-        </div>
-        <div className="dashboard-container">
-          <WeatherThumbnail />
-          <Link 
-            to= {{
-              pathname: '/news',
-              state: {
-                newsData: this.state.newsData
-              }
-            }}
-            className="news-link"><NewsThumbnail triggerParentUpdate={this.updateNewsData}/></Link>
-          <Link
-            to={{
-              pathname: '/sport'
-            }}
-            className="sport-link"><SportThumbnail teamName={this.props.teamName}/></Link>
-          <WeatherThumbnail />
-          <Link
-            to={{
-              pathname: '/tasks'
-            }}
-            className="tasks-link"><TasksThumbnail tasks={this.props.tasks}/></Link>
-          <ClothesThumbnail />
-        </div>
-      </React.Fragment>
-
-    )
+    if (auth.isAuthenticated()) {
+      return (
+        <React.Fragment>
+          <div className="dashboard-header" value={username}>
+            <h1>Good day {username}</h1>
+            <button className="logout-button" onClick={() => {
+            auth.logout(()=>{
+            this.props.history.push('/');
+            localStorage.clear();
+            });
+          }}>Logout</button>
+          </div>
+          <div className="dashboard-container">
+            <WeatherThumbnail />
+            <Link 
+              to= {{
+                pathname: '/news',
+                state: {
+                  newsData: this.state.newsData
+                }
+              }}
+              className="news-link"><NewsThumbnail triggerParentUpdate={this.updateNewsData}/></Link>
+            <Link
+              to={{
+                pathname: '/sport'
+              }}
+              className="sport-link"><SportThumbnail teamName={this.props.teamName}/></Link>
+            <Link
+              to={{
+                pathname: '/photos'
+              }}
+              className="photos-link"><PhotosThumbnail /></Link>
+            <Link
+              to={{
+                pathname: '/tasks'
+              }}
+              className="tasks-link"><TasksThumbnail tasks={this.props.tasks}/></Link>
+            <ClothesThumbnail />
+          </div>
+        </React.Fragment>
+      )
+    } else {
+      return <Redirect to={
+        {
+          pathname: '/',
+          state: {
+            from: this.props.location
+          }
+        }
+      } />
+    }
   }
+
 }
 
 

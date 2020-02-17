@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 import axios from 'axios';
+import auth from '../../auth'
 import { Link, Redirect } from 'react-router-dom';
 import "./style.css";
 
 class Login extends Component {
 
   state = {
-    username: "",
-    password: "",
+    username: '',
+    usernameError: '',
+    password: '',
+    passwordError: '',
+    errorMessage: '',
     redirect: false
   };
 
@@ -18,6 +22,9 @@ class Login extends Component {
   }
 
   handleSubmit = async (e) => {
+    this.setState({
+      errorMessage: ''
+    });
     e.preventDefault();
     const user = {
       username: this.state.username,
@@ -28,17 +35,23 @@ class Login extends Component {
       if (res.status === 200) {
         // store jwt token in local storage (Should implement better solution)
         localStorage.setItem('token', res.data.token);
+        // authenticate user
+        auth.login(() => {
+          this.props.history.push('/login');
+        });
         this.setState({redirect: true});
       }
     } catch (err) {
+      this.setState({
+        errorMessage: 'Invalid username or password'
+      });
       console.log(err.message);
-    }
+      }
   }
 
-  
   render() {
     const { redirect } = this.state;
-    if (redirect) {
+    if (auth.isAuthenticated()) {
       return <Redirect to='/dashboard' />;
     }
     const { username, password } = this.state;
@@ -68,6 +81,7 @@ class Login extends Component {
                   className="form-control" 
                   placeholder="Password"/>
               </div>
+              <small>{this.state.errorMessage}</small>
             </form>
             <button className="login-btn" onClick={this.handleSubmit} />
           </div>

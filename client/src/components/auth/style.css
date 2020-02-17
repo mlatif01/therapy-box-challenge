@@ -100,6 +100,12 @@ button:hover {
   color: #fff;
 }
 
+small {
+  color: tomato;
+  margin-left: 2rem;
+  display: block;
+}
+
 @media only screen and (max-width: 768px) {
   .register-form, .login-form {
     display: grid;

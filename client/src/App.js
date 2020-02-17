@@ -5,10 +5,11 @@ import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import axios from 'axios';
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import News from './components/news/News';
 import Sport from './components/sport/Sport';
 import Tasks from './components/tasks/Tasks';
+import Photos from './components/photos/Photos';
 
 
 class App extends Component {
@@ -70,20 +71,23 @@ class App extends Component {
     <Router>
       <div className="App">
         <div className="container">
-          <Route
-            exact
-            path="/(login|)/"
-            component={Login} />
-          <Route path="/register" component={Register} />
-          <Route path="/dashboard"
-            render={(props) => <Dashboard {...props} teamName={this.state.sportData.teamName} tasks={this.state.tasksData.tasks}/>  }
-          />
-          <Route path="/news" component={News} />
-          <Route path="/sport"
-            render={(props) => <Sport {...props} teamName={this.state.sportData.teamName} triggerParentUpdate={this.updateSportData}/>} />
-            
+          <Switch>
+            <Route
+              exact
+              path="/(login|)/"
+              component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/dashboard"
+              render={(props) => <Dashboard {...props} teamName={this.state.sportData.teamName} tasks={this.state.tasksData.tasks}/>  }
+            />
+            <Route path="/news" component={News} />
+            <Route path="/sport"
+              render={(props) => <Sport {...props} teamName={this.state.sportData.teamName} triggerParentUpdate={this.updateSportData}/>} />
+            <Route path="/photos" component={Photos}/>
             <Route path="/tasks"
-            render={(props) => <Tasks {...props} tasks={this.state.tasksData.tasks}/>} />
+              render={(props) => <Tasks {...props} tasks={this.state.tasksData.tasks}/>} />
+            <Route path="*" component={() => "404 Not Found"} />
+          </Switch>
         </div>
       </div>
     </Router>

@@ -45,18 +45,15 @@ router.post('/register', async (req, res) => {
       message: "Username has already been registered"
     });
   }
-
   // Generate salt and hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
   // Create a new user object
   const newUser = new Users({
     username: req.body.username,
     email: req.body.email,
     password: hashedPassword
   });
-
   // Save user in DB
   try {
     const savedUser = await newUser.save();
@@ -101,7 +98,6 @@ router.post('/login', async (req, res) => {
   const token = jwt.sign({ _id: user._id }, TOKEN_SECRET, {expiresIn: 99999}, (err, token) => {
     // Get user from token
     const decode = jwt_decode(token);
-
     res.json({
       success: true,
       token: token,
@@ -110,14 +106,6 @@ router.post('/login', async (req, res) => {
   });
 
 });
-
-/**
- * GET
- * Protected Routes
- */
-// router.get('/current', auth, (req, res) => {
-//   res.send('You can visit this route!');
-// })
 
 /**
  * GET

@@ -6,10 +6,14 @@ import "./style.css";
 class Register extends Component {
 
   state = {
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    username: '',
+    usernameError: '',
+    email: '',
+    emailError: '',
+    password: '',
+    passwordError: '',
+    confirmPassword: '',
+    confirmPasswordError: '',
     errors: {},
     redirect: false
   };
@@ -20,21 +24,64 @@ class Register extends Component {
     });
   }
 
+  validate = () => {
+    // -- Basic validation --
+    let isError = false;
+    const errors = {
+      usernameError: '',
+      emailError: '',
+      passwordError: '',
+      confirmPasswordError: '',
+    };
+
+    // validate fields
+    if (this.state.username.length < 6 || this.state.username.length > 31) {
+      isError = true;
+      errors.usernameError = 'Username must be between 6 - 30 characters'
+    }
+
+    if (this.state.email.indexOf('@') === -1) {
+      isError = true;
+      errors.emailError = 'Requires a valid email '
+    }
+
+    if (this.state.password.length < 6 || this.state.password.length > 31) {
+      isError = true;
+      errors.password = 'Requires a valid password '
+    }
+
+    if (this.state.password !== this.state.confirmPassword) {
+      isError = true;
+      errors.confirmPasswordError = 'Passwords do not match';
+    }
+
+    this.setState({
+      ...this.state,
+      ...errors
+    });
+    return isError;
+  }
+
   handleSubmit = async (e) => {
     e.preventDefault();
-    const newUser = {
-      username: this.state.username,
-      email: this.state.email,
-      password: this.state.password
-    }
-    try {
-      const res = await axios.post('/api/users/register', newUser);
-      if (res.status === 200) {
-        this.setState({redirect: true});
+
+    const err = this.validate();
+    if (!err) {
+      const newUser = {
+        username: this.state.username,
+        email: this.state.email,
+        password: this.state.password
       }
-    } catch (err) {
-      console.log(err.message);
+      try {
+        const res = await axios.post('/api/users/register', newUser);
+        if (res.status === 200) {
+          this.setState({redirect: true});
+        }
+      } catch (err) {
+        console.log(err.message);
+      }
     }
+
   }
 
   render() {
@@ -59,6 +106,7 @@ class Register extends Component {
                   onChange={this.handleChange}
                   className="form-control" 
                   placeholder="Username"/>
+                  <small>{this.state.usernameError}</small>
               </div>
               <div className="form-group">
               <input 
@@ -68,6 +116,7 @@ class Register extends Component {
                   onChange={this.handleChange}
                   className="form-control" 
                   placeholder="Email"/>
+                  <small>{this.state.emailError}</small>
               </div>
               <div className="form-group">
               <input 
@@ -77,6 +126,7 @@ class Register extends Component {
                   onChange={this.handleChange}
                   className="form-control" 
                   placeholder="Password"/>
+                  <small>{this.state.passwordError}</small>
               </div>
               <div className="form-group">
               <input 
@@ -86,6 +136,7 @@ class Register extends Component {
                   onChange={this.handleChange}
                   className="form-control" 
                   placeholder="Confirm password"/>
+                  <small>{this.state.confirmPasswordError}</small>
               </div>
             </form>
             <button className="register-btn" onClick={this.handleSubmit} />

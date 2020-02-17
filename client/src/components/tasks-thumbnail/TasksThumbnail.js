@@ -9,7 +9,7 @@ class TasksThumbnail extends Component {
   }
 
   render() {
-    const tasks = this.props.tasks.slice(0, 4); // Only render top 3
+    const tasks = this.props.tasks.slice(0, 3); // Only render top 3
     return (
       <div className="tasks-thumbnail-item">
         <div className="tasks-thumbnail-header">

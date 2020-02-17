@@ -1,0 +1,48 @@
+.photos-header {
+  margin-top: 3rem;
+}
+
+.photos-header h1 {
+  display: block;
+  text-align: center;
+  padding-left: 4rem;
+  color: #fff;
+  font-size: 4rem;
+  font-weight: 500;
+}
+
+.photos-content {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr;
+}
+
+.photos-pic {
+  background-image: url("./assets/Add_picture.png");
+  background-repeat: no-repeat;
+  background-size: 20rem 40rem;
+  background-size: contain;
+  height: 200px;
+  width: 300px;
+  margin: 2rem auto;
+}
+
+.photos-pic input {
+  margin-top: 1.4rem;
+  margin-left: 2rem;
+}
+
+.photos-pic img {
+  width: 20%;
+  margin-left: 12rem;
+  margin-top: 1.4rem;
+  background: #fff;
+  opacity: 0.9;
+  border-radius: 10px;
+}
+
+.photos-pic img:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
