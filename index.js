@@ -8,6 +8,7 @@ const {DB_CONNECT} = require('./config/keys');
 const users = require('./routes/users');
 const news = require('./routes/news');
 const clothes = require('./routes/clothes');
+const tasks = require('./routes/tasks');
 
 
 // const xmlBodyParser = require('express-xml-bodyparser');
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/users', users);
 app.use('/api/news', news);
 app.use('/api/clothes', clothes);
+app.use('/api/tasks', tasks);
 
 
 // Listen on specified port

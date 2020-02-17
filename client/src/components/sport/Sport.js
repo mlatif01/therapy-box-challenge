@@ -11,19 +11,38 @@ class Sport extends Component {
   }
 
   async componentDidMount() {
-      // get teams array
-      try {
-        const res = await axios.get('/api/news/sport');
-        if (res.status === 200) {
-          // get news headline and description
-          const teamsArr = res.data;
-          this.setState({
-            teamsArr: teamsArr
-          });
-        }
-      } catch (err) {
-        console.log(err);
+    this.setState({
+      teamName: this.props.teamName
+    });
+    // get teams array
+    try {
+      const res = await axios.get('/api/news/sport');
+      if (res.status === 200) {
+        // get news headline and description
+        const teamsArr = res.data;
+        this.setState({
+          teamsArr: teamsArr
+        });
       }
+    } catch (err) {
+      console.log(err);
+    }
+
+    // get team list if user has already entered it
+    // check teamsArr if there is a match
+    // if it exists display the beaten teams
+    const teamObj = this.state.teamsArr.find( obj => {
+      return obj.teamName.toLowerCase() === this.state.teamName.toLowerCase();
+    });
+    if (teamObj !== undefined) {
+      this.setState({
+        teamsBeaten: teamObj.teamsBeaten
+      });
+    } else {
+      this.setState({
+        teamsBeaten: []
+      });
+    }
   }
 
   handleChange = (e) => {

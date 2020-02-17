@@ -14,13 +14,13 @@
 
 }
 
-.news-link, .sport-link {
+.news-link, .sport-link, .tasks-link {
   text-decoration: none;
   color: #000;
   cursor: pointer;
 }
 
-.news-link:hover, .sport-link:hover {
+.news-link:hover, .sport-link:hover, .tasks-link:hover {
   opacity: 0.8;
 }
 

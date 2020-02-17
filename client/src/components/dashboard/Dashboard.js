@@ -6,6 +6,7 @@ import WeatherThumbnail from '../weather-thumbnail/WeatherThumbnail';
 import NewsThumbnail from '../news-thumbnail/NewsThumbnail';
 import ClothesThumbnail from '../clothes-thumbnail/ClothesThumbnail';
 import SportThumbnail from '../sport-thumbnail/SportThumbnail';
+import TasksThumbnail from '../tasks-thumbnail/TasksThumbnail';
 
 
 class Dashboard extends Component {
@@ -19,7 +20,6 @@ class Dashboard extends Component {
       image: ""
     },
   };
-
 
   handleChange = (e) => {
   }
@@ -81,7 +81,11 @@ class Dashboard extends Component {
             }}
             className="sport-link"><SportThumbnail teamName={this.props.teamName}/></Link>
           <WeatherThumbnail />
-          <WeatherThumbnail />
+          <Link
+            to={{
+              pathname: '/tasks'
+            }}
+            className="tasks-link"><TasksThumbnail tasks={this.props.tasks}/></Link>
           <ClothesThumbnail />
         </div>
       </React.Fragment>

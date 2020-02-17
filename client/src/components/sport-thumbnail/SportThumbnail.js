@@ -16,7 +16,7 @@ class SportThumbnail extends Component {
           <h1 className="">Sport</h1>
         </div>
         <div className="sport-thumbnail-headline">
-          <h2>{teamName.charAt(0) + teamName.slice(1)}</h2>
+          <h2>{teamName.charAt(0).toUpperCase() + teamName.slice(1)}</h2>
         </div>
       </div>
     )
