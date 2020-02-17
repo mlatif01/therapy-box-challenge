@@ -4,6 +4,7 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import axios from 'axios';
+import auth from './components/auth/auth';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import News from './components/news/News';
@@ -16,15 +17,40 @@ class App extends Component {
 
   state = {
     sportData: {
-      teamName: 'Juventus'
+      teamName: ''
     },
     tasksData: {
       tasks: []
     }
   }
 
+  getTeamName = async () => {
+    // get favourite team name from api
+    try {
+      const res = await axios.get('/api/news/sport/team', {
+        headers: {
+          'Authorization': localStorage.getItem('token')
+        }
+      });
+      if (res.status === 200) {
+        // set teamName
+        console.log(res.data);
+        const teamName = res.data.team;
+        this.setState({
+          sportData: {
+            teamName: res.data.team
+          }
+        });
+        console.log(teamName);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   componentDidMount() {
     this.getTasksData();
+    this.getTeamName();
   }
 
   // Get tasks data in App so we can pass as prop to Sports & Dashboard components

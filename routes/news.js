@@ -4,15 +4,72 @@ const bbcUrl = 'http://feeds.bbci.co.uk/news/rss.xml';
 const sportUrl = 'http://www.football-data.co.uk/mmz4281/1718/I1.csv';
 const axios = require('axios').default;
 const CSVtoJSON = require('csvtojson');
+const Team = require('../models/Team');
 
 // Auth
 const auth = require('../config/auth');
 
 /**
+ * POST
+ * Favourite Team
+ */
+router.post('/sport/team', auth, async (req, res) => {
+  // Checking if the user has team entry
+  const teamExists = await Team.findOne({userId: req.user._id});
+  
+    // Save task in DB
+    if (!teamExists) {
+        // Create a new team entry
+        const entry = new Team({
+            userId: req.user._id
+        });
+        entry.team =  req.body.team;
+        try {
+            const savedEntry = await entry.save();
+            res.send(savedEntry);
+        } catch(err) {
+            res.status(400).send(err);
+        }
+    } 
+    else if (teamExists) {
+        // add to existing entry
+        const entry = teamExists;
+        entry.team = req.body.team;
+        try {
+            const savedEntry = await entry.save();
+            res.send(savedEntry);
+        } catch(err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+    }
+});
+
+/**
+ * GET
+ * User Team Data
+ */
+router.get('/sport/team', auth, async (req, res) => {
+
+  // Checking if the user has tasks entry
+  const teamExists = await Team.findOne({userId: req.user._id});
+
+  // retrieve task data
+  const entry = teamExists;
+  try {
+      res.send(entry);
+  } catch(err) {
+      console.log(err);
+      res.status(400).send(err);
+  }
+});
+
+
+/**
  * GET
  * XML BBC News Converted in JSON
  */
-router.get('/bbc', async (req, res) => {
+router.get('/bbc', auth, async (req, res) => {
   // get xml news data
   try {
     const xmlRes = await axios.get(bbcUrl);
@@ -30,7 +87,7 @@ router.get('/bbc', async (req, res) => {
  * GET
  * CSV Sport News
  */
-router.get('/sport', async (req, res) => {
+router.get('/sport', auth, async (req, res) => {
   // get csv data 
   const response = await axios.get(sportUrl);
   const csvString = response.data;

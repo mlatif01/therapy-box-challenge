@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const Photos = require('../models/Photos');
 
 // Auth
 const auth = require('../config/auth');
@@ -8,7 +7,7 @@ const auth = require('../config/auth');
  * POST
  * Photos data
  */
-router.post('/', (req, res) => {
+router.post('/', auth, (req, res) => {
     if (req.files === null) {
         return res.status(400).json({mgs: 'No files uploaded'});
     }
@@ -28,20 +27,6 @@ router.post('/', (req, res) => {
  * GET
  * User Photos Data
  */
-router.get('/', auth, async (req, res) => {
-
-  // Checking if the user has tasks entry
-  const photosExist = await Photos.findOne({userId: req.user._id});
-
-  // retrieve task data
-  const entry = photosExist;
-  try {
-      res.send(entry);
-  } catch(err) {
-      console.log(err);
-      res.status(400).send(err);
-  }
-});
   
 
 // Export

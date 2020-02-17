@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import auth from '../../auth'
+import auth from './auth'
 import { Link, Redirect } from 'react-router-dom';
 import "./style.css";
 

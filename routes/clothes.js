@@ -5,7 +5,6 @@ const axios = require('axios').default;
 // Auth
 const auth = require('../config/auth');
 
-
 /**
  * GET
  * Clothes data

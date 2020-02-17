@@ -59,11 +59,8 @@ router.get('/', auth, async (req, res) => {
         console.log(err);
         res.status(400).send(err);
     }
-  });
+});
   
-  router.get('/current', auth, async (req, res) => {
-    res.send('Test API');
-  });
 
 // Export
 module.exports = router;

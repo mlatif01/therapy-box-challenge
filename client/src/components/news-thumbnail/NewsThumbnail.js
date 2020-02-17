@@ -14,7 +14,11 @@ class NewsThumbnail extends Component {
   async getNewsXML() {
     // get json news object from server
     try {
-      const res = await axios.get('/api/news/bbc');
+      const res = await axios.get('/api/news/bbc', {
+        headers: {
+          'Authorization': localStorage.getItem('token')
+        }
+      });
       if (res.status === 200) {
         // get news headline and description
         const newsData = res.data.rss.channel[0].item[0];

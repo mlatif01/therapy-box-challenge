@@ -10,13 +10,19 @@ class Sport extends Component {
     teamsArr: []
   }
 
+
+
   async componentDidMount() {
     this.setState({
       teamName: this.props.teamName
     });
     // get teams array
     try {
-      const res = await axios.get('/api/news/sport');
+      const res = await axios.get('/api/news/sport', {
+        headers: {
+          'Authorization': localStorage.getItem('token')
+        }
+      });
       if (res.status === 200) {
         // get news headline and description
         const teamsArr = res.data;
@@ -42,6 +48,23 @@ class Sport extends Component {
       this.setState({
         teamsBeaten: []
       });
+    }
+  }
+
+  onSubmit = async (e) => {
+    e.preventDefault();
+    // post team to server
+    const teamObj = {
+      team: this.state.teamName
+    }
+    try {
+      const res = await axios.post('/api/news/sport/team', teamObj, {
+        headers: {
+          'Authorization': localStorage.getItem('token')
+        }
+      });
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -79,9 +102,9 @@ class Sport extends Component {
         </div>
 
         <div className="sport-form-container">
-            <form className="sport-form">
+            <form className="sport-form" onSubmit={this.onSubmit}>
               <div className="sport-form-group">
-                <input 
+                <input
                   type="text" 
                   name="teamName"
                   value={teamName}

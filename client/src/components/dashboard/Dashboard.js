@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-import auth from '../../auth';
+import auth from '../auth/auth';
 import "./style.css";
 import WeatherThumbnail from '../weather-thumbnail/WeatherThumbnail';
 import NewsThumbnail from '../news-thumbnail/NewsThumbnail';

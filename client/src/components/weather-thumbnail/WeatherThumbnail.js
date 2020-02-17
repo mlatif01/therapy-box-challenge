@@ -42,7 +42,6 @@ class WeatherThumbnail extends Component {
       const res = await axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}`);
       if (res.status === 200) {
         // Set logo
-        console.log(res.data.weather[0].main);
         switch (res.data.weather[0].main) {
           case "Clouds":
             this.state.logo = logoCloud;

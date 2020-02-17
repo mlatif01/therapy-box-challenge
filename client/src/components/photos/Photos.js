@@ -1,8 +1,9 @@
-import React, { Component, Fragment, useState } from 'react'
+import React, { Component } from 'react'
 import "./style.css";
 import axios from 'axios';
-import addPicture from './assets/Add_picture.png';
 import addButton from './assets/Plus_button.png';
+import auth from '../auth/auth';
+import { Redirect } from 'react-router-dom';
 
 class Photos extends Component {
 
@@ -25,7 +26,8 @@ class Photos extends Component {
     try {
       const res = await axios.post('/api/photos', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'Authorization': localStorage.getItem('token')
         }
       });
       const {fileName, filePath} = res.data;
@@ -51,30 +53,40 @@ class Photos extends Component {
   }
 
   render() {
-    return (
-      <div className="photos-item">
-
-        <div className="photos-header">
-          <h1>Photos</h1>
-        </div>
-
-        <div className="photos-content">
-          <div className="photos-pic">
-            <input type="file" onChange={this.onChange}/>
-            <img src={addButton} onClick={this.onSubmit} />
+    if (auth.isAuthenticated()) {
+      return (
+        <div className="photos-item">
+          <div className="photos-header">
+            <h1>Photos</h1>
           </div>
-          {
-            this.state.uploadedFile ?
-            <div className="uploaded-img">
-              <h3>{this.state.fileName}</h3>
-              <img style={{width: '100%'}}src={this.state.filePath} />
+
+          <div className="photos-content">
+            <div className="photos-pic">
+              <input type="file" onChange={this.onChange}/>
+              <img src={addButton} onClick={this.onSubmit} />
             </div>
-            :
-            null
-          }
+            {
+              this.state.uploadedFile ?
+              <div className="uploaded-img">
+                <h3>{this.state.fileName}</h3>
+                <img style={{width: '100%'}}src={this.state.filePath} />
+              </div>
+              :
+              null
+            }
+          </div>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return <Redirect to={
+        {
+          pathname: '/',
+          state: {
+            from: this.props.location
+          }
+        }
+      } />
+    }
   }
 }
 

@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom';
 import "./style.css";
 import axios from 'axios';
+import auth from '../auth/auth';
 
 class Tasks extends Component {
 
   constructor() {
     super()
-
     this.state = {
       tasks: [],
       task: ''
@@ -15,7 +16,6 @@ class Tasks extends Component {
     // set bindings
     this.handleInputChange = this.handleInputChange.bind(this);
     this.submitTask = this.submitTask.bind(this);
-
   }
 
   handleInputChange = (e) => {
@@ -70,13 +70,13 @@ class Tasks extends Component {
       this.setState({
         tasks: taskData
       });
-      console.log(taskData);
     }
     // display and mark the box as checked/unchecked using checked property
 
   }
 
   render() {
+    if (auth.isAuthenticated()) {
     return (
       <div className="tasks-item">
         <div className="tasks-header">
@@ -97,8 +97,17 @@ class Tasks extends Component {
           })}
         </div>
       </div>
-    )
-  }
+    ) } else {
+      return <Redirect to={
+        {
+          pathname: '/',
+          state: {
+            from: this.props.location
+          }
+        }
+      } />
+    }
+  } 
 }
 
 export default Tasks;
