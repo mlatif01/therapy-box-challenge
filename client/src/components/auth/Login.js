@@ -62,18 +62,20 @@ class Login extends Component {
             <h1>Dev Challenge</h1>
           </div>
           <div className="form-container">
-            <form className="login-form">
+            <form className="login-form" onSubmit={this.handleSubmit}>
               <div className="form-group">
-                <input 
+                <input
+                  autocomplete="nope" 
                   type="text" 
                   name="username"
                   value={username}
                   onChange={this.handleChange}
                   className="form-control" 
                   placeholder="Username"/>
+              <small>{this.state.errorMessage}</small>
               </div>
               <div className="form-group">
-              <input 
+              <input
                   type="password" 
                   name="password"
                   value={password}
@@ -81,9 +83,8 @@ class Login extends Component {
                   className="form-control" 
                   placeholder="Password"/>
               </div>
-              <small>{this.state.errorMessage}</small>
+              <button type="submit" className="login-btn"/>
             </form>
-            <button className="login-btn" onClick={this.handleSubmit} />
           </div>
           <p>New to the challenge? 
             <Link className="link" to="/register"> Sign Up</Link></p>

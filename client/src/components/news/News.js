@@ -13,12 +13,16 @@ class News extends Component {
   }
 
   componentDidMount() {
-    const {headline, article, image} = this.props.location.state.newsData;
-    this.setState({
-      headline: headline,
-      article: article,
-      image: image
-    })
+    try {
+      const {headline, article, image} = this.props.location.state.newsData;
+      this.setState({
+        headline: headline || undefined,
+        article: article || undefined,
+        image: image || undefined
+      })
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {

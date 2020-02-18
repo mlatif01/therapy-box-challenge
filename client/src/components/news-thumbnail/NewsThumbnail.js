@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import "./style.css";
 import axios from 'axios';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 class NewsThumbnail extends Component {
 

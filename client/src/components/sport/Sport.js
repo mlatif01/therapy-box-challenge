@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom';
 import "./style.css";
 import axios from 'axios';
+import auth from '../auth/auth';
 
 class Sport extends Component {
 
@@ -95,6 +97,7 @@ class Sport extends Component {
 
   render() {
     const {teamName, teamsBeaten} = this.state;
+    if (auth.isAuthenticated()) {
     return (
       <div className="sport-item">
         <div className="sport-header">
@@ -128,8 +131,17 @@ class Sport extends Component {
 
 
       </div>
-    )
-  }
+    ) } else {
+      return <Redirect to={
+        {
+          pathname: '/',
+          state: {
+            from: this.props.location
+          }
+        }
+      } />
+    }
+  } 
 }
 
 export default Sport;

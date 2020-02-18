@@ -3,6 +3,10 @@
   position: relative;
 }
 
+.register-container p {
+  margin-bottom: 2rem;
+}
+
 .form-header h1 {
   margin-top: 5rem;
   text-align: center;
@@ -18,12 +22,13 @@ p {
 .form-container {
   margin-top: 6rem;
   display: grid;
+  grid-template-rows: 1fr;
 }
 
 .register-form, .login-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 3rem;
+  grid-gap: 0rem;
   margin-top: 4rem;
   margin: 0 auto;
 }
@@ -61,7 +66,7 @@ input:-webkit-autofill:active {
 }
 
 .register-btn {
-  margin-top: 2rem;
+  margin-top: 1rem;
   height: 48px;
   width: 190px;
   border-radius: 1.6rem;
@@ -71,10 +76,11 @@ input:-webkit-autofill:active {
   background-size: contain;
   cursor: pointer;
   margin: 4rem auto;
+  grid-column: 1 / -1;
 }
 
 .login-btn {
-  margin-top: 2rem;
+  margin-top: 1rem;
   height: 48px;
   width: 190px;
   border-radius: 1.6rem;
@@ -84,6 +90,7 @@ input:-webkit-autofill:active {
   background-size: contain;
   cursor: pointer;
   margin: 4rem auto;
+  grid-column: 1 / -1;
 }
 
 button:hover {

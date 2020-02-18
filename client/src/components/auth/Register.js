@@ -62,7 +62,7 @@ class Register extends Component {
     return isError;
   }
 
-  handleSubmit = async (e) => {
+  onSubmit = async (e) => {
     e.preventDefault();
 
     const err = this.validate();
@@ -92,14 +92,15 @@ class Register extends Component {
     const { username, email, password, confirmPassword } = this.state;
     return (
       <React.Fragment>
-        <div className="login-container">
+        <div className="register-container">
           <div className="form-header">
             <h1>Dev Challenge</h1>
           </div>
           <div className="form-container">
-            <form className="register-form">
+            <form onSubmit={this.onSubmit} className="register-form">
               <div className="form-group">
-                <input 
+                <input
+                  autocomplete="nope" 
                   type="text" 
                   name="username"
                   value={username}
@@ -109,7 +110,8 @@ class Register extends Component {
                   <small>{this.state.usernameError}</small>
               </div>
               <div className="form-group">
-              <input 
+              <input
+                  autocomplete="nope" 
                   type="email" 
                   name="email"
                   value={email}
@@ -119,7 +121,8 @@ class Register extends Component {
                   <small>{this.state.emailError}</small>
               </div>
               <div className="form-group">
-              <input 
+              <input
+                  autocomplete="nope" 
                   type="password" 
                   name="password"
                   value={password}
@@ -129,7 +132,7 @@ class Register extends Component {
                   <small>{this.state.passwordError}</small>
               </div>
               <div className="form-group">
-              <input 
+              <input
                   type="password" 
                   name="confirmPassword"
                   value={confirmPassword}
@@ -138,8 +141,8 @@ class Register extends Component {
                   placeholder="Confirm password"/>
                   <small>{this.state.confirmPasswordError}</small>
               </div>
+              <button type="submit" className="register-btn" />
             </form>
-            <button className="register-btn" onClick={this.handleSubmit} />
           </div>
           <p>Already registered? 
             <Link className="link" to="/login"> Sign In</Link></p>
