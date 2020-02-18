@@ -3,13 +3,15 @@ import { Redirect } from 'react-router-dom';
 import "./style.css";
 import axios from 'axios';
 import auth from '../auth/auth';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 class Sport extends Component {
 
   state = {
     teamName: "",
     teamsBeaten: [],
-    teamsArr: []
+    teamsArr: [],
+    goBack: false
   }
 
 
@@ -93,16 +95,33 @@ class Sport extends Component {
         teamsBeaten: []
       });
     }
+
+
+  }
+
+  setGoBack = (e) => {
+    this.setState({
+      goBack: true
+    })
   }
 
   render() {
     const {teamName, teamsBeaten} = this.state;
-    if (auth.isAuthenticated()) {
+        if (this.state.goBack) {
+      return <Redirect to='/dashboard' />;
+    }
+    if (auth.isAuthenticated() || this.state.shouldUpdate) {
+      const teamsElem = teamsBeaten.map((val, ind) => {
+        return <li key={ind}>{val}</li>;
+      });
     return (
       <div className="sport-item">
         <div className="sport-header">
           <h1>Champion's League Challenge</h1>
         </div>
+        <button className="back-button" onClick={this.setGoBack}>
+          Back
+        </button>
 
         <div className="sport-form-container">
             <form className="sport-form" onSubmit={this.onSubmit}>
@@ -121,11 +140,19 @@ class Sport extends Component {
         <div className="sport-content">
           <h2>These are the teams you won against:</h2>
           <div className="teams-beaten">
-            {
-              teamsBeaten.map((val, ind) => {
-                return <li key={ind}>{val}</li>
-              })
-            }
+            <CSSTransitionGroup
+              transitionName="team"
+              transitionAppear={true}
+              transitionAppearTimeout={500}
+              transitionEnter={true}
+              transitionEnterTimeout={500}
+              transitionLeave={true}
+              transitionLeaveTimeout={500}
+              >
+              {
+                teamsElem
+              }
+            </CSSTransitionGroup>
           </div>
         </div>
 

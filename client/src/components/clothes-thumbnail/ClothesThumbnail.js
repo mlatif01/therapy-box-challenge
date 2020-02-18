@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Component } from 'react';
 import "./style.css";
 import axios from 'axios';
 import {Pie} from 'react-chartjs-2';
 
-class ClothesThumbnail extends Component {
+class ClothesThumbnail extends PureComponent {
 
   state = {
     clothesData: [],
