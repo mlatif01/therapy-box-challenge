@@ -128,6 +128,7 @@ class Tasks extends Component {
   }
 
   async componentDidMount() {
+    this.props.getTasksData();
     // get all the tasks for the current user
     const taskData = this.props.tasks;
     if (taskData) {

@@ -68,7 +68,7 @@ class App extends Component {
     if (res.data.tasks) {
       this.setState({
         tasksData: {
-          tasks: [...res.data.tasks]
+          tasks: [...res.data.tasks] || ""
         }
       });
     }
@@ -125,7 +125,7 @@ class App extends Component {
             />
             <Route path="/dashboard"
               render={(props) => <Dashboard {...props} teamName={this.state.sportData.teamName} tasks={this.state.tasksData.tasks}
-              getTeamName={this.getTeamName}/>  }
+              getTeamName={this.getTeamName} getTasksData={this.getTasksData}/>  }
             />
             <Route path="/news" component={News} />
             <Route path="/sport"
@@ -133,7 +133,7 @@ class App extends Component {
               teamName={this.state.sportData.teamName} triggerParentUpdate={this.updateSportData}/>} />
             <Route path="/photos" component={Photos}/>
             <Route path="/tasks"
-              render={(props) => <Tasks {...props} triggerParentUpdate={this.updateTasksData} tasks={this.state.tasksData.tasks}/>} />
+              render={(props) => <Tasks {...props} triggerParentUpdate={this.updateTasksData} tasks={this.state.tasksData.tasks} getTasksData={this.getTasksData}/>} />
             <Route path="*" component={() => <h1 style={this.notFoundStyle}>404 Not Found</h1>} />
           </Switch>
         </div>

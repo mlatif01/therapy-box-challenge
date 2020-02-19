@@ -30,6 +30,7 @@ class Dashboard extends Component {
   }
 
   async componentDidMount () {
+    this.setState({ state: this.state });
     window.addEventListener("scroll", this.handleScroll);
     const token = localStorage.getItem('token');
     const headerConfig = {
@@ -122,7 +123,7 @@ class Dashboard extends Component {
               to={{
                 pathname: '/tasks'
               }}
-              className="tasks-link"><TasksThumbnail tasks={this.props.tasks}/></Link>
+              className="tasks-link"><TasksThumbnail tasks={this.props.tasks} getTasksData={this.props.getTasksData}/></Link>
             <ClothesThumbnail />
           </div>
         </React.Fragment>

@@ -37,7 +37,7 @@ class Login extends Component {
         localStorage.setItem('token', res.data.token);
         // authenticate user
         auth.login(() => {
-          // this.props.loginGoodRequest();
+          this.props.loginGoodRequest();
           this.props.history.push('/login');
         });
         this.setState({redirect: true});
