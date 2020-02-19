@@ -40,7 +40,7 @@ class App extends Component {
         const teamName = res.data.team;
         this.setState({
           sportData: {
-            teamName: res.data.team
+            teamName: res.data.team || ""
           }
         });
         console.log(teamName);
@@ -52,7 +52,7 @@ class App extends Component {
 
   componentDidMount() {
     this.getTasksData();
-    this.getTeamName();
+    // this.getTeamName();
   }
 
   // Get tasks data in App so we can pass as prop to Sports & Dashboard components
@@ -101,11 +101,15 @@ class App extends Component {
 
   render() {
     // Called once in app
-    toast.configure();
+    toast.configure({autoClose: 2000, draggable: false});
     const sportBadRequest = () => toast.error('Team is invalid');
     const sportGoodRequest = () => toast.success('Team has been updated');
-    const loginGoodRequest = () => toast.success('Logged in Successfully');
+    const loginGoodRequest = () => toast.success('Logged in Successfully', {
+      position: toast.POSITION.TOP_LEFT
+    });
     const loginBadRequest = () => toast.error('Invalid Credentials');
+    const registerGoodRequest = () => toast.success('Registered Successfully');
+    const registerBadRequest = () => toast.error('Registration Unsuccessful');
 
     return (
     <Router>
@@ -115,14 +119,22 @@ class App extends Component {
             <Route
               exact
               path="/(login|)/"
-              component={Login} />
-            <Route path="/register" component={Register} />
+              render={(props) => <Login {...props} 
+              loginGoodRequest={loginGoodRequest} 
+              loginBadRequest={loginBadRequest} />} 
+            />
+            <Route path="/register"
+              render={(props) => <Register {...props}
+              registerGoodRequest={registerGoodRequest}
+              registerBadRequest={registerBadRequest}/>}
+            />
             <Route path="/dashboard"
-              render={(props) => <Dashboard {...props} teamName={this.state.sportData.teamName} tasks={this.state.tasksData.tasks}/>  }
+              render={(props) => <Dashboard {...props} teamName={this.state.sportData.teamName} tasks={this.state.tasksData.tasks}
+              getTeamName={this.getTeamName}/>  }
             />
             <Route path="/news" component={News} />
             <Route path="/sport"
-              render={(props) => <Sport {...props} sportGoodRequest={sportGoodRequest} sportBadRequest={sportBadRequest} 
+              render={(props) => <Sport {...props} sportGoodRequest={sportGoodRequest} sportBadRequest={sportBadRequest} getTeamName={this.getTeamName}
               teamName={this.state.sportData.teamName} triggerParentUpdate={this.updateSportData}/>} />
             <Route path="/photos" component={Photos}/>
             <Route path="/tasks"

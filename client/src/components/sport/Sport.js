@@ -16,6 +16,7 @@ class Sport extends Component {
   }
 
   async componentDidMount() {
+    this.props.getTeamName();
     this.setState({
       teamName: this.props.teamName
     });

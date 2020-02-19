@@ -37,6 +37,7 @@ class Login extends Component {
         localStorage.setItem('token', res.data.token);
         // authenticate user
         auth.login(() => {
+          this.props.loginGoodRequest();
           this.props.history.push('/login');
         });
         this.setState({redirect: true});
@@ -45,13 +46,14 @@ class Login extends Component {
       this.setState({
         errorMessage: 'Invalid username or password'
       });
-      console.log(err.message);
+      this.props.loginBadRequest();
+    
       }
   }
 
   render() {
     const { redirect } = this.state;
-    if (auth.isAuthenticated()) {
+    if (auth.isAuthenticated() && localStorage.getItem('token')) {
       return <Redirect to='/dashboard' />;
     }
     const { username, password } = this.state;

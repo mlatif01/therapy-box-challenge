@@ -75,9 +75,11 @@ class Register extends Component {
       try {
         const res = await axios.post('/api/users/register', newUser);
         if (res.status === 200) {
+          this.props.registerGoodRequest();
           this.setState({redirect: true});
         }
       } catch (err) {
+        this.props.registerBadRequest();
         console.log(err.message);
       }
     }

@@ -96,7 +96,7 @@ class Dashboard extends Component {
             this.props.history.push('/');
             localStorage.clear();
             });
-          }}>Logout</button>
+          }}><i class="fas fa-sign-out-alt fa-2x"></i></button>
           </div>
           <div className="dashboard-container">
             <WeatherThumbnail />
@@ -112,7 +112,7 @@ class Dashboard extends Component {
               to={{
                 pathname: '/sport'
               }}
-              className="sport-link"><SportThumbnail teamName={this.props.teamName}/></Link>
+              className="sport-link"><SportThumbnail teamName={this.props.teamName} getTeamName={this.props.getTeamName}/></Link>
             <Link
               to={{
                 pathname: '/photos'
