@@ -95,16 +95,36 @@ class App extends Component {
   }
 
   render() {
-    // Called once in app
+    // Toast Notifications
     toast.configure({autoClose: 2000, draggable: false});
     const sportBadRequest = () => toast.error('Team is invalid');
     const sportGoodRequest = () => toast.success('Team has been updated');
     const loginGoodRequest = () => toast.success('Logged in Successfully', {
       position: toast.POSITION.TOP_LEFT
     });
+
     const loginBadRequest = () => toast.error('Invalid Credentials');
     const registerGoodRequest = () => toast.success('Registered Successfully');
     const registerBadRequest = () => toast.error('Registration Unsuccessful');
+    
+    const taskAddGoodRequest = () => toast.success('Task added successfully', {
+      position: toast.POSITION.TOP_CENTER
+    });
+    const taskAddBadRequest = () => toast.error('Task could not be added', {
+      position: toast.POSITION.TOP_CENTER
+    });
+    const taskDelGoodRequest = () => toast.warning('Task deleted successfully', {
+      position: toast.POSITION.TOP_CENTER
+    });
+    const taskDelBadRequest = () => toast.error('Task could not be deleted', {
+      position: toast.POSITION.TOP_CENTER
+    });
+    const taskEditGoodRequest = () => toast.info('Task edited successfully', {
+      position: toast.POSITION.TOP_CENTER
+    });
+    const taskEditBadRequest = () => toast.error('Task could not be edited', {
+      position: toast.POSITION.TOP_CENTER
+    });
 
     return (
     <Router>
@@ -133,7 +153,9 @@ class App extends Component {
               teamName={this.state.sportData.teamName} triggerParentUpdate={this.updateSportData}/>} />
             <Route path="/photos" component={Photos}/>
             <Route path="/tasks"
-              render={(props) => <Tasks {...props} triggerParentUpdate={this.updateTasksData} tasks={this.state.tasksData.tasks} getTasksData={this.getTasksData}/>} />
+              render={(props) => <Tasks {...props} triggerParentUpdate={this.updateTasksData} tasks={this.state.tasksData.tasks} getTasksData={this.getTasksData}
+                                  taskAddGoodRequest={taskAddGoodRequest} taskAddBadRequest={taskAddBadRequest} taskDelGoodRequest={taskDelGoodRequest}
+                                  taskDelBadRequest={taskDelBadRequest} taskEditGoodRequest={taskEditGoodRequest} taskEditBadRequest={taskEditBadRequest}/>} />
             <Route path="*" component={() => <h1 style={this.notFoundStyle}>404 Not Found</h1>} />
           </Switch>
         </div>

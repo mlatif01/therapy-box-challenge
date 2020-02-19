@@ -59,9 +59,10 @@ class Tasks extends Component {
           task: ""
         });
         this.props.triggerParentUpdate();
+        this.props.taskAddGoodRequest();
       }
     } catch (err) {
-      console.log(err.message);
+      this.props.taskAddBadRequest();
     }
   }
 
@@ -91,9 +92,10 @@ class Tasks extends Component {
         const res = await axios.delete('/api/tasks', headerConfig);
         if (res.status === 200) {
           this.props.triggerParentUpdate();
+          this.props.taskDelGoodRequest();
         }
       } catch (err) {
-        console.log(err.message);
+        this.props.taskDelBadRequest();
       }
     }
   }
@@ -121,9 +123,10 @@ class Tasks extends Component {
       const res = await axios.put('/api/tasks', body, headerConfig);
       if (res.status === 200) {
         this.props.triggerParentUpdate();
+        this.props.taskEditGoodRequest();
       }
     } catch (err) {
-      console.log(err.message);
+      this.props.taskEditBadRequest();
     }
   }
 
