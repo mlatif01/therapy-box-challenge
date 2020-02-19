@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
@@ -92,7 +94,19 @@ class App extends Component {
     });
   }
 
+  notFoundStyle = {
+    margin: '10rem',
+    color: '#8b0000'
+  }
+
   render() {
+    // Called once in app
+    toast.configure();
+    const sportBadRequest = () => toast.error('Team is invalid');
+    const sportGoodRequest = () => toast.success('Team has been updated');
+    const loginGoodRequest = () => toast.success('Logged in Successfully');
+    const loginBadRequest = () => toast.error('Invalid Credentials');
+
     return (
     <Router>
       <div className="App">
@@ -108,11 +122,12 @@ class App extends Component {
             />
             <Route path="/news" component={News} />
             <Route path="/sport"
-              render={(props) => <Sport {...props} teamName={this.state.sportData.teamName} triggerParentUpdate={this.updateSportData}/>} />
+              render={(props) => <Sport {...props} sportGoodRequest={sportGoodRequest} sportBadRequest={sportBadRequest} 
+              teamName={this.state.sportData.teamName} triggerParentUpdate={this.updateSportData}/>} />
             <Route path="/photos" component={Photos}/>
             <Route path="/tasks"
               render={(props) => <Tasks {...props} tasks={this.state.tasksData.tasks}/>} />
-            <Route path="*" component={() => "404 Not Found"} />
+            <Route path="*" component={() => <h1 style={this.notFoundStyle}>404 Not Found</h1>} />
           </Switch>
         </div>
       </div>

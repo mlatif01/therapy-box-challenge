@@ -4,6 +4,7 @@ import "./style.css";
 import axios from 'axios';
 import auth from '../auth/auth';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import BackButton from '../utils/BackButton';
 
 class Sport extends Component {
 
@@ -13,8 +14,6 @@ class Sport extends Component {
     teamsArr: [],
     goBack: false
   }
-
-
 
   async componentDidMount() {
     this.setState({
@@ -28,7 +27,7 @@ class Sport extends Component {
         }
       });
       if (res.status === 200) {
-        // get news headline and description
+        // get teams arr
         const teamsArr = res.data;
         this.setState({
           teamsArr: teamsArr
@@ -57,7 +56,7 @@ class Sport extends Component {
 
   onSubmit = async (e) => {
     e.preventDefault();
-    // post team to server
+    // post favourite team to server
     const teamObj = {
       team: this.state.teamName
     }
@@ -67,7 +66,11 @@ class Sport extends Component {
           'Authorization': localStorage.getItem('token')
         }
       });
+      if (res.status === 200) {
+        this.props.sportGoodRequest();
+      }
     } catch (err) {
+      this.props.sportBadRequest();
       console.log(err);
     }
   }
@@ -107,67 +110,65 @@ class Sport extends Component {
 
   render() {
     const {teamName, teamsBeaten} = this.state;
-        if (this.state.goBack) {
+    if (this.state.goBack) {
       return <Redirect to='/dashboard' />;
     }
     if (auth.isAuthenticated() || this.state.shouldUpdate) {
       const teamsElem = teamsBeaten.map((val, ind) => {
         return <li key={ind}>{val}</li>;
       });
-    return (
-      <div className="sport-item">
-        <div className="sport-header">
-          <h1>Champion's League Challenge</h1>
-        </div>
-        <button className="back-button" onClick={this.setGoBack}>
-          Back
-        </button>
-
-        <div className="sport-form-container">
-            <form className="sport-form" onSubmit={this.onSubmit}>
-              <div className="sport-form-group">
-                <input
-                  type="text" 
-                  name="teamName"
-                  value={teamName}
-                  onChange={this.handleChange}
-                  className="form-control" 
-                  placeholder="Team Name"/>
-              </div>
-            </form>
-        </div>
-
-        <div className="sport-content">
-          <h2>These are the teams you won against:</h2>
-          <div className="teams-beaten">
-            <CSSTransitionGroup
-              transitionName="team"
-              transitionAppear={true}
-              transitionAppearTimeout={500}
-              transitionEnter={true}
-              transitionEnterTimeout={500}
-              transitionLeave={true}
-              transitionLeaveTimeout={500}
-              >
-              {
-                teamsElem
-              }
-            </CSSTransitionGroup>
+      return (
+        <div className="sport-item">
+          <div className="sport-header">
+            <h1>Champion's League Challenge</h1>
           </div>
+          <BackButton triggerParentUpdate={this.setGoBack}/>
+
+          <div className="sport-form-container">
+              <form className="sport-form" onSubmit={this.onSubmit}>
+                <div className="sport-form-group">
+                  <input
+                    type="text" 
+                    name="teamName"
+                    value={teamName}
+                    onChange={this.handleChange}
+                    className="form-control" 
+                    placeholder="Team Name"/>
+                </div>
+              </form>
+          </div>
+
+          <div className="sport-content">
+            <h2>These are the teams you won against:</h2>
+            <div className="teams-beaten">
+              <CSSTransitionGroup 
+                transitionName="team"
+                transitionAppear={true}
+                transitionAppearTimeout={500}
+                transitionEnter={true}
+                transitionEnterTimeout={500}
+                transitionLeave={true}
+                transitionLeaveTimeout={500}
+                >
+                {
+                  teamsElem
+                }
+              </CSSTransitionGroup>
+            </div>
+          </div>
+
+
         </div>
-
-
-      </div>
-    ) } else {
-      return <Redirect to={
-        {
-          pathname: '/',
-          state: {
-            from: this.props.location
-          }
-        }
-      } />
-    }
+    )} else {
+          return <Redirect to={
+            {
+              pathname: '/',
+              state: {
+                from: this.props.location
+              }
+            }
+          } />
+      }
   } 
 }
 

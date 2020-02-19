@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import "./style.css";
 import axios from 'axios';
 import addButton from './assets/Plus_button.png';
+import BackButton from '../utils/BackButton';
 import auth from '../auth/auth';
 import { Redirect } from 'react-router-dom';
 
@@ -11,7 +12,8 @@ class Photos extends Component {
     setFile: '',
     setFilename: '',
     fileName: '',
-    filePath: ''
+    filePath: '',
+    goBack: false
   }
 
   updatePhotos = () => {
@@ -42,7 +44,12 @@ class Photos extends Component {
         console.log(err.response.data.msg);
       }
     }
+  }
 
+  setGoBack = (e) => {
+    this.setState({
+      goBack: true
+    })
   }
 
   onChange = (e) => {
@@ -53,11 +60,15 @@ class Photos extends Component {
   }
 
   render() {
+    if (this.state.goBack) {
+      return <Redirect to='/dashboard' />;
+    }
     if (auth.isAuthenticated()) {
       return (
         <div className="photos-item">
           <div className="photos-header">
             <h1>Photos</h1>
+            <BackButton triggerParentUpdate={this.setGoBack}/>
           </div>
 
           <div className="photos-content">

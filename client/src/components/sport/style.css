@@ -39,7 +39,7 @@
   font-size: 3.2rem;
 }
 
-.teams-beaten {
+.teams-beaten span {
   font-size: 1.6rem;
   font-weight: bold;
   margin-top: 2rem;

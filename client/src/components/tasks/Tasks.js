@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom';
+import BackButton from '../utils/BackButton';
 import "./style.css";
 import axios from 'axios';
 import auth from '../auth/auth';
@@ -10,7 +11,8 @@ class Tasks extends Component {
     super()
     this.state = {
       tasks: [],
-      task: ''
+      task: '',
+      goBack: false
     }
 
     // set bindings
@@ -24,6 +26,11 @@ class Tasks extends Component {
     });
   }
 
+  setGoBack = (e) => {
+    this.setState({
+      goBack: true
+    })
+  }
 
   submitTask = async (e) => {
     let tasks = this.state.tasks;
@@ -76,11 +83,15 @@ class Tasks extends Component {
   }
 
   render() {
+    if (this.state.goBack) {
+      return <Redirect to='/dashboard' />;
+    }
     if (auth.isAuthenticated()) {
     return (
       <div className="tasks-item">
         <div className="tasks-header">
           <h1>Tasks</h1>
+          <BackButton triggerParentUpdate={this.setGoBack}/>
         </div>
 
         <div className="tasks-content">

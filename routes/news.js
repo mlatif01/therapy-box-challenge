@@ -5,6 +5,7 @@ const sportUrl = 'http://www.football-data.co.uk/mmz4281/1718/I1.csv';
 const axios = require('axios').default;
 const CSVtoJSON = require('csvtojson');
 const Team = require('../models/Team');
+const port = process.env.PORT || 5000;
 
 // Auth
 const auth = require('../config/auth');
@@ -16,32 +17,53 @@ const auth = require('../config/auth');
 router.post('/sport/team', auth, async (req, res) => {
   // Checking if the user has team entry
   const teamExists = await Team.findOne({userId: req.user._id});
+  var teamFound = false;
+
+  // check for valid team in the array of italian teams in the csv
+  const domain = req.headers.host;
+  try {
+    const res = await axios.get('http://'+domain+'/api/news/sport', {
+      headers: {
+        'Authorization': req.header('Authorization')
+      }
+    });
+    if (res.status === 200) {
+      // get teams array
+      const teamsArr = res.data;
+      // check if team exists in that array
+      teamFound = teamsArr.filter(e => e.teamName.toLowerCase() === req.body.team.toLowerCase()).length > 0;
+    }
+  } catch (err) {
+    console.log(err);
+  }
   
-    // Save task in DB
-    if (!teamExists) {
-        // Create a new team entry
-        const entry = new Team({
-            userId: req.user._id
-        });
-        entry.team =  req.body.team;
-        try {
-            const savedEntry = await entry.save();
-            res.send(savedEntry);
-        } catch(err) {
-            res.status(400).send(err);
-        }
-    } 
-    else if (teamExists) {
-        // add to existing entry
-        const entry = teamExists;
-        entry.team = req.body.team;
-        try {
-            const savedEntry = await entry.save();
-            res.send(savedEntry);
-        } catch(err) {
-            console.log(err);
-            res.status(400).send(err);
-        }
+  // Save team in DB
+  if (!teamExists && teamFound) {
+      // Create a new team entry
+      const entry = new Team({
+          userId: req.user._id
+      });
+      entry.team =  req.body.team;
+      try {
+          const savedEntry = await entry.save();
+          res.send(savedEntry);
+      } catch(err) {
+          res.status(400).send(err);
+      }
+  } 
+  else if (teamExists && teamFound) {
+      // add to existing entry
+      const entry = teamExists;
+      entry.team = req.body.team;
+      try {
+          const savedEntry = await entry.save();
+          res.send(savedEntry);
+      } catch(err) {
+          console.log(err);
+          res.status(400).send(err);
+      }
+    } else {
+      res.status(400).send('Team not found');
     }
 });
 
