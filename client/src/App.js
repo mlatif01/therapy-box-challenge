@@ -36,14 +36,12 @@ class App extends Component {
       });
       if (res.status === 200) {
         // set teamName
-        console.log(res.data);
         const teamName = res.data.team;
         this.setState({
           sportData: {
             teamName: res.data.team || ""
           }
         });
-        console.log(teamName);
       }
     } catch (err) {
       console.log(err);
@@ -55,7 +53,7 @@ class App extends Component {
     // this.getTeamName();
   }
 
-  // Get tasks data in App so we can pass as prop to Sports & Dashboard components
+  // Get tasks data in App so we can pass as prop to Tasks & Dashboard components
   getTasksData = async (e) => {
     // get all the tasks for the current user
     const token = localStorage.getItem('token');
@@ -70,11 +68,12 @@ class App extends Component {
     if (res.data.tasks) {
       this.setState({
         tasksData: {
-          tasks: res.data.tasks
+          tasks: [...res.data.tasks]
         }
       });
     }
-}
+    console.log(this.state.tasksData.tasks);
+  }
 
   // update sport data passed from child (Sport) to parent state (App)
   updateSportData = (teamName) => {
@@ -86,12 +85,8 @@ class App extends Component {
   }
 
   // update tasks data passed from child (Sport) to parent state (App)
-  updateTasksData = (tasks) => {
-    this.setState({
-      tasksData: {
-        tasks: tasks
-      }
-    });
+  updateTasksData = () => {
+    this.getTasksData();
   }
 
   notFoundStyle = {
@@ -138,7 +133,7 @@ class App extends Component {
               teamName={this.state.sportData.teamName} triggerParentUpdate={this.updateSportData}/>} />
             <Route path="/photos" component={Photos}/>
             <Route path="/tasks"
-              render={(props) => <Tasks {...props} tasks={this.state.tasksData.tasks}/>} />
+              render={(props) => <Tasks {...props} triggerParentUpdate={this.updateTasksData} tasks={this.state.tasksData.tasks}/>} />
             <Route path="*" component={() => <h1 style={this.notFoundStyle}>404 Not Found</h1>} />
           </Switch>
         </div>

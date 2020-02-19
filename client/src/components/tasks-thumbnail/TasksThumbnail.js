@@ -17,7 +17,7 @@ class TasksThumbnail extends Component {
         <div className="tasks-thumbnail-content">
         {
           tasks.map((val, ind) => {
-            return <li key={ind}>{val} <span><input type="checkbox" disabled="disabled"/></span></li>
+            return <li key={val._id}>{val.task} <span><input type="checkbox" checked={val.completed} disabled="disabled"/></span></li>
           })
         }
         </div>

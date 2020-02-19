@@ -33,15 +33,13 @@ class Tasks extends Component {
   }
 
   submitTask = async (e) => {
-    let tasks = this.state.tasks;
+    e.preventDefault();
     let task = this.state.task;
-    if (task !== "") {
-      tasks.push(task)
-      this.setState({ tasks: tasks, task: ""});
-    } else {
+
+    if (task === "") {
       alert('Please enter a name for the task');
     }
-    // post entire array to db 
+    // post entire task data to api
     const token = localStorage.getItem('token');
     const headerConfig = {
       headers: {
@@ -51,11 +49,78 @@ class Tasks extends Component {
       }
     }
     const taskObj = {
-      tasks: this.state.tasks
+      task: this.state.task,
+      completed: false
     }
     try {
       const res = await axios.post('/api/tasks', taskObj, headerConfig);
       if (res.status === 200) {
+        this.setState({
+          task: ""
+        });
+        this.props.triggerParentUpdate();
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  deleteTask = async (e) => {
+    e.preventDefault();
+
+    const task = e.target.parentElement.firstChild.value;
+
+    let flag = window.confirm('Are you sure you want to delete this task?');
+
+    // send task data to api
+    const token = localStorage.getItem('token');
+    const headerConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': `${token}`
+      },
+      // Serialize json data
+      data: JSON.stringify({
+        task: task
+      })
+    }
+
+    if(flag) {
+      try {
+        const res = await axios.delete('/api/tasks', headerConfig);
+        if (res.status === 200) {
+          this.props.triggerParentUpdate();
+        }
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+  }
+
+  toggleCheck = async (e) => {
+    const task = e.target.parentElement.firstChild.value;
+    const completed = e.target.checked;
+
+    // send task completed data to api
+    const token = localStorage.getItem('token');
+    const headerConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': `${token}`
+      },
+    }
+
+    const body = {
+      task: task,
+      completed: completed
+    }
+
+    try {
+      const res = await axios.put('/api/tasks', body, headerConfig);
+      if (res.status === 200) {
+        this.props.triggerParentUpdate();
       }
     } catch (err) {
       console.log(err.message);
@@ -64,22 +129,12 @@ class Tasks extends Component {
 
   async componentDidMount() {
     // get all the tasks for the current user
-    const token = localStorage.getItem('token');
-    const headerConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Authorization': `${token}`
-      }
-    }
     const taskData = this.props.tasks;
     if (taskData) {
       this.setState({
         tasks: taskData
       });
     }
-    // display and mark the box as checked/unchecked using checked property
-
   }
 
   render() {
@@ -93,16 +148,19 @@ class Tasks extends Component {
           <h1>Tasks</h1>
           <BackButton triggerParentUpdate={this.setGoBack}/>
         </div>
-
+        <div className="tasks-form-container">
+          <form className="tasks-form" onSubmit={this.submitTask}>
+            <input placeholder="Add task" className="form-control" type="text" name="task" value={this.state.task} onChange={this.handleInputChange}/>
+          </form>
+          {/* <button className="tasks-btn" onClick={this.submitTask}></button> */}
+        </div>
         <div className="tasks-content">
-          <input placeholder="Add a new task" className="form-control" type="text" name="task" value={this.state.task} onChange={this.handleInputChange}/>
-          <button className="tasks-btn" onClick={this.submitTask}></button>
-
-          {this.state.tasks.map((task, ind) => {
+          {this.props.tasks.map((val, ind) => {
             return (
-              <div className="tasks-item" key={ind}>
-                <input className="form-control" type="text" name="task" value={task}/>
-                <input type="checkbox"/>
+              <div className="tasks-item" key={val._id}>
+                <input className="form-control" type="text" name="task" value={val.task}/>
+                <input onChange={this.toggleCheck} type="checkbox" checked={val.completed}/>
+                <button onClick={this.deleteTask} className="tasks-btn">Delete</button>
               </div>
             )
           })}

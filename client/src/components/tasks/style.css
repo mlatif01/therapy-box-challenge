@@ -22,15 +22,13 @@
 }
 
 .tasks-content .tasks-item {
-  display: flex;
-  flex-direction: row;
   margin-top: 3rem;
 }
 
-.tasks-content input[type='text'] {
+/* .tasks-content input[type='text'] {
   margin: 0 auto;
   width: 60%;
-}
+} */
 
 .tasks-content input[type='checkbox'] {
   height: 20px;
@@ -47,7 +45,7 @@
   background-color: transparent;
   font-size: 1rem;
   margin: 4rem 2rem;
-  width: 40rem;
+  width: 30rem;
 }
 
 .tasks-content img {
@@ -57,11 +55,12 @@
 }
 
 .tasks-btn {
-  height: 30px;
-  width: 30px;
-  background-image: url("./assets/Plus_button_small.png");
-  background-repeat: no-repeat;
-  background-size: contain;
+  border-radius: 10px;
+  height: 40px;
+  width: 60px;
+  color: #fff;
+  background-color: tomato;
+  border: 1px solid #ccc;
   cursor: pointer;
   margin-left: 4rem;
 }
@@ -80,13 +79,19 @@
   background-color: transparent;
   font-size: 1rem;
   margin: 4rem 2rem;
-  width: 20rem;
+  width: 30rem;
 }
 
 .form-control:focus {
   border-bottom-color:  #ffff00;
   color: #fff;
-} 
+}
+
+.tasks-form-container input[type="text"] {
+  display: block;
+  margin: 0 auto;
+  font-size: 3.2rem;
+}
 
 /* input:-webkit-autofill,
 input:-webkit-autofill:hover,

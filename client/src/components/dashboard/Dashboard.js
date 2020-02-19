@@ -96,7 +96,7 @@ class Dashboard extends Component {
             this.props.history.push('/');
             localStorage.clear();
             });
-          }}><i class="fas fa-sign-out-alt fa-2x"></i></button>
+          }}><i className="fas fa-sign-out-alt fa-2x"></i></button>
           </div>
           <div className="dashboard-container">
             <WeatherThumbnail />
