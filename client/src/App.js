@@ -23,7 +23,8 @@ class App extends Component {
     },
     tasksData: {
       tasks: []
-    }
+    },
+    imageData: []
   }
 
   getTeamName = async () => {
@@ -49,6 +50,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.getImageData();
     this.getTasksData();
     // this.getTeamName();
   }
@@ -74,6 +76,24 @@ class App extends Component {
     }
   }
 
+  getImageData = async (e) => {
+    // get all the images for the current user
+    const token = localStorage.getItem('token');
+    const headerConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': `${token}`
+      }
+    }
+    const res = await axios.get('/api/upload', headerConfig);
+    if (res.data.images) {
+      this.setState({
+        imageData: res.data.images
+      });
+    }
+  }
+
   // update sport data passed from child (Sport) to parent state (App)
   updateSportData = (teamName) => {
     this.setState({
@@ -86,6 +106,11 @@ class App extends Component {
   // update tasks data passed from child (Sport) to parent state (App)
   updateTasksData = () => {
     this.getTasksData();
+  }
+
+  // update image data passed from child (Photos) to parent state (App)
+  updateImageData = () => {
+    this.getImageData();
   }
 
   notFoundStyle = {
@@ -125,6 +150,14 @@ class App extends Component {
       position: toast.POSITION.TOP_CENTER
     });
 
+    const photoGoodRequest = () => toast.success('Image added Successfully', {
+      position: toast.POSITION.TOP_LEFT
+    });
+
+    const photoBadRequest = () => toast.error('Image could not be added', {
+      position: toast.POSITION.TOP_LEFT
+    });
+
     return (
     <Router>
       <div className="App">
@@ -144,13 +177,16 @@ class App extends Component {
             />
             <Route path="/dashboard"
               render={(props) => <Dashboard {...props} teamName={this.state.sportData.teamName} tasks={this.state.tasksData.tasks}
-              getTeamName={this.getTeamName} getTasksData={this.getTasksData}/>  }
+              getTeamName={this.getTeamName} getTasksData={this.getTasksData} imageData={this.state.imageData} getImageData={this.getImageData}/>  }
             />
             <Route path="/news" component={News} />
             <Route path="/sport"
               render={(props) => <Sport {...props} sportGoodRequest={sportGoodRequest} sportBadRequest={sportBadRequest} getTeamName={this.getTeamName}
               teamName={this.state.sportData.teamName} triggerParentUpdate={this.updateSportData}/>} />
-            <Route path="/photos" component={Photos}/>
+            <Route path="/photos" 
+              render={ (props) => <Photos {...props} photoGoodRequest={photoGoodRequest} photoBadRequest={photoBadRequest} triggerParentUpdate={this.updateImageData}
+                      imageData={this.state.imageData} getImageData={this.getImageData}/>} />
+              />
             <Route path="/tasks"
               render={(props) => <Tasks {...props} triggerParentUpdate={this.updateTasksData} tasks={this.state.tasksData.tasks} getTasksData={this.getTasksData}
                                   taskAddGoodRequest={taskAddGoodRequest} taskAddBadRequest={taskAddBadRequest} taskDelGoodRequest={taskDelGoodRequest}

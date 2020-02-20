@@ -38,7 +38,7 @@ router.post('/', auth, async (req, res) => {
     
     // store the data to db
     if (!tasksExist && flag) {
-        // Create a new fav manga entry
+        // Create a new task  entry
         const entry = new Tasks({
             userId: user._id
         });

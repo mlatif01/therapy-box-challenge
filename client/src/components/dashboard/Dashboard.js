@@ -118,7 +118,7 @@ class Dashboard extends Component {
               to={{
                 pathname: '/photos'
               }}
-              className="photos-link"><PhotosThumbnail /></Link>
+              className="photos-link"><PhotosThumbnail imageData={this.props.imageData} getImageData={this.props.getImageData}/></Link>
             <Link
               to={{
                 pathname: '/tasks'

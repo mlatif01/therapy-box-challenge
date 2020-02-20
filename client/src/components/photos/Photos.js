@@ -11,7 +11,7 @@ class Photos extends Component {
   state = {
     setFile: '',
     setFilename: '',
-    imageData: '',
+    imageData: [],
     uploadedFile: '',
     goBack: false
   }
@@ -20,50 +20,98 @@ class Photos extends Component {
 
   }
 
-  getImageData = async (e) => {
+  // getImageData = async (e) => {
+  //   // get all the tasks for the current user
+  //   const token = localStorage.getItem('token');
+  //   const headerConfig = {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Access-Control-Allow-Origin': '*',
+  //       'Authorization': `${token}`
+  //     }
+  //   }
+  //   const res = await axios.get('/api/upload', headerConfig);
+  //   if (res.data.images) {
+  //     this.setState({
+  //       imageData: res.data.images
+  //     });
+  //   }
+  // }
+
+  async componentDidMount() {
+    // this.getImageData();
+    this.props.getImageData();
     // get all the tasks for the current user
+    const imageData = this.props.imageData;
+    if (imageData) {
+      this.setState({
+        imageData: imageData
+      });
+    }
+  }
+
+  onSubmit = async (e) => {
+    e.preventDefault();
+    if (this.state.setFile === '') {
+      alert('Please choose a file');
+    } else {
+      const formData = new FormData();
+      formData.append('imageData', this.state.setFile);
+      try {
+        const res = await axios.post('/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': localStorage.getItem('token')
+          }
+        });
+        this.props.photoGoodRequest();
+        this.setState({
+          uploadedFile: res.data.file
+        });
+        this.props.triggerParentUpdate();
+      } catch (err) {
+        console.log(err);
+        this.props.photoBadRequest();
+      }
+      this.props.getImageData();
+    }
+    // reset file input value
+    const imgInput = document.getElementById('img-input');
+    imgInput.value = '';
+    this.setState({
+      setFilename: '',
+      setFile: ''
+    });
+  }
+
+  deleteImage = async (e) => {
+    e.preventDefault();
+
+    const imageId = e.target.id;
+    let flag = window.confirm('Are you sure you want to delete this image?');
+
+    // send image data to api
     const token = localStorage.getItem('token');
     const headerConfig = {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Authorization': `${token}`
-      }
-    }
-    const res = await axios.get('/api/upload', headerConfig);
-    if (res.data.image) {
-      this.setState({
-        imageData: res.data.image
-      });
-    }
-  }
-
-  async componentDidMount() {
-    this.getImageData();
-  }
-
-  onSubmit = async (e) => {
-    e.preventDefault();
-    console.log(this.state);
-    const formData = new FormData();
-    formData.append('imageData', this.state.setFile);
-    console.log(formData);
-    try {
-      const res = await axios.post('/api/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': localStorage.getItem('token')
-        }
-      });
-      console.log(res.data);
-      this.setState({
-        uploadedFile: res.data.file
+      },
+      // Serialize json data
+      data: JSON.stringify({
+        imageId: imageId
       })
-    } catch (err) {
-      if (err.response.status === 500) {
-        console.log('There was a problem with the server');
-      } else {
-        console.log(err.response.data.msg);
+    }
+    console.log(headerConfig);
+
+    if(flag) {
+      try {
+        const res = await axios.delete('/api/upload', headerConfig);
+        if (res.status === 200) {
+          this.props.triggerParentUpdate();
+        }
+      } catch (err) {
       }
     }
   }
@@ -81,9 +129,8 @@ class Photos extends Component {
     });
   }
 
+  // btoa(String.fromCharCode(...new Uint8Array(imgObj.image.data)))
   render() {
-    // The line below is from the gods
-    let image = btoa(String.fromCharCode(...new Uint8Array(this.state.imageData.data)));
     if (this.state.goBack) {
       return <Redirect to='/dashboard' />;
     }
@@ -94,16 +141,31 @@ class Photos extends Component {
             <h1>Photos</h1>
             <BackButton triggerParentUpdate={this.setGoBack}/>
           </div>
-
-          <div className="photos-content">
-            <div className="photos-pic">
-              <form>
-                <input name="imageData" type="file" onChange={this.onChange}/>
-                <img src={addButton} onClick={this.onSubmit} />
-                <img className="photos-img"src={`data:image/jpeg;base64,${image}`} />
-              </form>
+          <form className="photos-form">
+            <div className="btn-wrapper">
+              <label class="btn-file">
+                <input id="img-input" name="imageData" type="file" onChange={this.onChange}/> {"Choose File:" + this.state.setFilename}
+              </label>
             </div>
+            <button className="add-img-btn" src={addButton} onClick={this.onSubmit}>Add</button>
+          </form>
+
+          <div className="photos-container">
+              { this.props.imageData.map((imgObj, ind) => {
+              return (
+              <div className="photos-content">
+                {/* <button className="del-img-btn">Delete</button> */}
+                <div className="photos-pic">
+                  <img id={imgObj._id} className="photos-img" src={`data:${imgObj.contentType};base64,${
+                    btoa(new Uint8Array(imgObj.image.data).reduce(function (data, byte) {
+                        return data + String.fromCharCode(byte);
+                    }, ''))}`} />
+                </div>
+              </div>
+                )
+              })}
           </div>
+
         </div>
       )
     } else {

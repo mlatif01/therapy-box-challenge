@@ -11,8 +11,9 @@ const fs = require('file-system');
 // Auth
 const auth = require('./config/auth')
 
-// Image Model
+// Model
 const Image = require('./models/Image');
+const Users = require('./models/Users');
 
 // Init app
 const app = express();
@@ -28,13 +29,17 @@ const storage = multer.diskStorage({
 
 // Initialise upload
 const upload = multer({
-  storage: storage
-})
+  storage: storage,
+  limits: {filesize: 500000},
+  fileFilter: function(req, file, cb) {
+    checkFileType(file, cb);
+  }
+});
 //   limits: {filesize: 1000000},
 //   fileFilter: function(req, file, cb) {
 //     checkFileType(file, cb);
 //   }
-// }).single('imageData');
+// });
 
 // Check file type
 function checkFileType(file, cb) {
@@ -52,27 +57,56 @@ function checkFileType(file, cb) {
   }
 }
 
+/* MULTER */
 // Route for multer
+/**
+ * POST
+ * Post image data - encode as base 64
+ */
 app.post('/api/upload', auth, upload.single('imageData'), async (req, res, next) => {
+
+  // Get User Details
+  const user = await Users.findById(req.user);
+
+  // Checking if the user has image collections entry
+  const imageExists = await Image.findOne({userId: req.user._id});
+
   const file = fs.readFileSync(req.file.path);
   const encodeImage = file.toString('base64');
 
   // define a JSON Object for image
-  const newImage = new Image({
+  const newImageObj= {
     contentType: req.file.mimetype,
     path: req.file.path,
     image: new Buffer(encodeImage, 'base64'),
     userId: req.user._id
-  });
-
-  console.log(newImage.image);
-
+  };
   // insert image to DB
-  try {
-    const savedImage = await newImage.save();
-    res.json({ savedImage });
-  } catch (err) {
-    console.log(err);
+  // create a new entry
+  if (!imageExists) {
+    const imageEntry = new Image({
+      userId: user._id
+    });
+
+    imageEntry.images.push(newImageObj);
+    try {
+      const savedImage = await imageEntry.save();
+      res.json({ savedImage });
+    } catch (err) {
+      res.status.send(400).send(err);
+      console.log(err);
+    }
+  } else if (imageExists) {
+    // add to existing entry
+    const imageEntry = imageExists;
+    imageEntry.images.push(newImageObj);
+    try {
+      const savedImage = await imageEntry.save();
+      res.json({ savedImage });
+    } catch (err) {
+      res.status.send(400).send(err);
+      console.log(err);
+    }
   }
 
   if (!file) {
@@ -82,12 +116,16 @@ app.post('/api/upload', auth, upload.single('imageData'), async (req, res, next)
   }
 });
 
+/**
+ * GET
+ * Get image data - in base 64 - decode on client side
+ */
 app.get('/api/upload', auth, async (req, res) => {
 
   // Checking if the user has tasks entry
   const imageExists = await Image.findOne({userId: req.user._id});
 
-  // retrieve task data
+  // retrieve image data
   const entry = imageExists;
   try {
       console.log(entry);
@@ -97,6 +135,29 @@ app.get('/api/upload', auth, async (req, res) => {
       res.status(400).send(err);
   }
 });
+
+/**
+ * DELETE
+ * Delete image
+ */
+app.delete('/api/upload', auth, async (req, res) => {
+  try {
+    const entry = await Image.update({userId: req.user._id}, {
+        "$pull": {
+          "images": {
+            "_id": req.body.imageId
+          }
+        }
+      });
+    res.send("Deleted Image");     
+} catch (err) {
+    console.log(err);
+    res.status(400).send(err);
+}
+})
+
+/* Multer End */
+
 
 // Public folder
 app.use(express.static('./public'));
