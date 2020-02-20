@@ -92,3 +92,37 @@ input:-webkit-autofill:active {
 ::placeholder {
   color: #fff;
 }
+
+@media only screen and (max-width: 978px) {
+  .sport-form .form-control {
+    width: 15rem;
+  }
+
+  .sport-form-container input[type="text"] {
+    display: block;
+    margin: 0 auto;
+    font-size: 2.2rem;
+  }
+
+  .teams-beaten span {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-top: 2rem;
+    margin-left: 4rem;
+    list-style: none;
+    color: #fff;
+    display: grid;
+    grid-template-columns: 1fr;
+    transition: 0.2s ease-in;
+  }
+
+  .sport-header h1 {
+    display: block;
+    text-align: center;
+    padding-left: 0rem;
+    color: #fff;
+    font-size: 4rem;
+    font-weight: 500;
+  }
+
+}

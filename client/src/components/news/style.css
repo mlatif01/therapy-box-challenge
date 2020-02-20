@@ -32,3 +32,22 @@
   font-size: 1.4rem;
   color: #fff;
 }
+
+@media only screen and (max-width: 978px) {
+  .news-header h1 {
+    display: block;
+    text-align: center;
+    padding-left: 0rem;
+    position: relative;
+    color: #fff;
+  }
+
+  .news-header img {
+    align-items: center;
+    margin: 0 auto;
+    justify-content: center;
+    align-content: center;
+    display: none;
+    height: 50px;
+  }
+}

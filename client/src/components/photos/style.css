@@ -7,7 +7,8 @@
   text-align: center;
   color: #fff;
   font-size: 4rem;
-  font-weight: 500;
+  font-weight: 600;
+  margin-bottom: 2rem;
 }
 
 .photos-container {
@@ -24,10 +25,6 @@
 }
 
 .photos-pic {
-  /* background-image: url("./assets/Add_picture.png");
-  background-repeat: no-repeat;
-  background-size: 20rem 40rem;
-  background-size: contain; */
   width: 400px;
   margin: 2rem auto;
 }
@@ -54,7 +51,7 @@
   cursor: pointer;
   text-align: center;
   display: block;
-  margin-top: 10px;
+  margin-top: 2rem;
 }
 
 .add-img-btn:hover {
@@ -114,4 +111,21 @@
 .btn-file span {
   display: block;
   color: #777;
+}
+
+@media only screen and (max-width: 1076px) {
+  .photos-container {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(250px, 1fr));
+  }
+
+  .photos-pic {
+    /* width: 50%; */
+    /* margin: 2rem auto; */
+  }
+
+  .photos-header h1 {
+    margin-bottom: 7rem;
+  }
+  
 }
