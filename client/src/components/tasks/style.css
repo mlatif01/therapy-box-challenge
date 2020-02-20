@@ -12,6 +12,7 @@
 }
 
 .tasks-content {
+  display: grid;
   font-size: 1.6rem;
   text-align: left;
   margin-top: 4rem;
@@ -22,19 +23,13 @@
 }
 
 .tasks-content .tasks-item {
-  margin-top: 3rem;
+  /* margin-top: 3rem; */
 }
 
 /* .tasks-content input[type='text'] {
   margin: 0 auto;
   width: 60%;
 } */
-
-.tasks-content input[type='checkbox'] {
-  height: 20px;
-  width: 20px;
-  margin: 0 auto;
-}
 
 .tasks-content .form-control {
   outline: 0;
@@ -91,6 +86,12 @@
   display: block;
   margin: 0 auto;
   font-size: 3.2rem;
+}
+
+.tasks-content input[type='checkbox'] {
+  height: 30px;
+  width: 30px;
+  margin: 0 auto;
 }
 
 /* input:-webkit-autofill,

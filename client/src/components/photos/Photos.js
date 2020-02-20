@@ -11,8 +11,8 @@ class Photos extends Component {
   state = {
     setFile: '',
     setFilename: '',
-    fileName: '',
-    filePath: '',
+    imageData: '',
+    uploadedFile: '',
     goBack: false
   }
 
@@ -20,23 +20,45 @@ class Photos extends Component {
 
   }
 
+  getImageData = async (e) => {
+    // get all the tasks for the current user
+    const token = localStorage.getItem('token');
+    const headerConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': `${token}`
+      }
+    }
+    const res = await axios.get('/api/upload', headerConfig);
+    if (res.data.image) {
+      this.setState({
+        imageData: res.data.image
+      });
+    }
+  }
+
+  async componentDidMount() {
+    this.getImageData();
+  }
+
   onSubmit = async (e) => {
     e.preventDefault();
     console.log(this.state);
     const formData = new FormData();
-    formData.append('file', this.state.setFile);
+    formData.append('imageData', this.state.setFile);
+    console.log(formData);
     try {
-      const res = await axios.post('/api/photos', formData, {
+      const res = await axios.post('/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': localStorage.getItem('token')
         }
       });
-      const {fileName, filePath} = res.data;
-      this.state.fileName = fileName;
-      this.state.filePath = filePath;
-      this.updatePhotos();
       console.log(res.data);
+      this.setState({
+        uploadedFile: res.data.file
+      })
     } catch (err) {
       if (err.response.status === 500) {
         console.log('There was a problem with the server');
@@ -60,6 +82,8 @@ class Photos extends Component {
   }
 
   render() {
+    // The line below is from the gods
+    let image = btoa(String.fromCharCode(...new Uint8Array(this.state.imageData.data)));
     if (this.state.goBack) {
       return <Redirect to='/dashboard' />;
     }
@@ -73,18 +97,12 @@ class Photos extends Component {
 
           <div className="photos-content">
             <div className="photos-pic">
-              <input type="file" onChange={this.onChange}/>
-              <img src={addButton} onClick={this.onSubmit} />
+              <form>
+                <input name="imageData" type="file" onChange={this.onChange}/>
+                <img src={addButton} onClick={this.onSubmit} />
+                <img className="photos-img"src={`data:image/jpeg;base64,${image}`} />
+              </form>
             </div>
-            {
-              this.state.uploadedFile ?
-              <div className="uploaded-img">
-                <h3>{this.state.fileName}</h3>
-                <img style={{width: '100%'}}src={this.state.filePath} />
-              </div>
-              :
-              null
-            }
           </div>
         </div>
       )

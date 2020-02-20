@@ -72,7 +72,6 @@ class App extends Component {
         }
       });
     }
-    console.log(this.state.tasksData.tasks);
   }
 
   // update sport data passed from child (Sport) to parent state (App)
