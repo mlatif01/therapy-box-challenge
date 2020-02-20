@@ -170,7 +170,7 @@ const tasks = require('./routes/tasks');
 const photos = require('./routes/photos');
 
 // Connect to DB
-mongoose.connect(DB_CONNECT, {useNewUrlParser: true}, () => {
+mongoose.connect(process.env.MONGODB_URI || DB_CONNECT, {useNewUrlParser: true}, () => {
   console.log('Connected to DB successfully');
 }).catch(err => console.log(error(`Connectiion to DB not established due to error: ${err}`)));
 
@@ -188,6 +188,16 @@ app.use('/api/news', news);
 app.use('/api/clothes', clothes);
 app.use('/api/tasks', tasks);
 app.use('/api/photos', photos);
+
+// Serve React App
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html')); // relative path
+  });
+} 
+
 
 // Listen on specified port
 app.listen(port, () => console.log(`Listening on ${port}`));
