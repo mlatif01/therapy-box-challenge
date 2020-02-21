@@ -53,8 +53,10 @@ class Login extends Component {
 
   render() {
     const { redirect } = this.state;
-    if (auth.isAuthenticated() && localStorage.getItem('token')) {
+    if (auth.isAuthenticated()) {
       return <Redirect to='/dashboard' />;
+    } else {
+      
     }
     const { username, password } = this.state;
     return (

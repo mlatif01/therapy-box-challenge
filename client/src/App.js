@@ -24,7 +24,9 @@ class App extends Component {
     tasksData: {
       tasks: []
     },
-    imageData: []
+    imageData: [],
+    loggedInStatus: "NOT_LOGGED_IN",
+    
   }
 
   getTeamName = async () => {
